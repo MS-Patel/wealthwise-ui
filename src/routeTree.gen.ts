@@ -13,6 +13,10 @@ import { Route as LoginRouteImport } from './routes/login'
 import { Route as ForgotPasswordRouteImport } from './routes/forgot-password'
 import { Route as AppRouteImport } from './routes/app'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AppRmIndexRouteImport } from './routes/app.rm.index'
+import { Route as AppInvestorIndexRouteImport } from './routes/app.investor.index'
+import { Route as AppDistributorIndexRouteImport } from './routes/app.distributor.index'
+import { Route as AppAdminIndexRouteImport } from './routes/app.admin.index'
 
 const LoginRoute = LoginRouteImport.update({
   id: '/login',
@@ -34,37 +38,94 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AppRmIndexRoute = AppRmIndexRouteImport.update({
+  id: '/rm/',
+  path: '/rm/',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppInvestorIndexRoute = AppInvestorIndexRouteImport.update({
+  id: '/investor/',
+  path: '/investor/',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppDistributorIndexRoute = AppDistributorIndexRouteImport.update({
+  id: '/distributor/',
+  path: '/distributor/',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppAdminIndexRoute = AppAdminIndexRouteImport.update({
+  id: '/admin/',
+  path: '/admin/',
+  getParentRoute: () => AppRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
-  '/app': typeof AppRoute
+  '/app': typeof AppRouteWithChildren
   '/forgot-password': typeof ForgotPasswordRoute
   '/login': typeof LoginRoute
+  '/app/admin/': typeof AppAdminIndexRoute
+  '/app/distributor/': typeof AppDistributorIndexRoute
+  '/app/investor/': typeof AppInvestorIndexRoute
+  '/app/rm/': typeof AppRmIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
-  '/app': typeof AppRoute
+  '/app': typeof AppRouteWithChildren
   '/forgot-password': typeof ForgotPasswordRoute
   '/login': typeof LoginRoute
+  '/app/admin': typeof AppAdminIndexRoute
+  '/app/distributor': typeof AppDistributorIndexRoute
+  '/app/investor': typeof AppInvestorIndexRoute
+  '/app/rm': typeof AppRmIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
-  '/app': typeof AppRoute
+  '/app': typeof AppRouteWithChildren
   '/forgot-password': typeof ForgotPasswordRoute
   '/login': typeof LoginRoute
+  '/app/admin/': typeof AppAdminIndexRoute
+  '/app/distributor/': typeof AppDistributorIndexRoute
+  '/app/investor/': typeof AppInvestorIndexRoute
+  '/app/rm/': typeof AppRmIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/app' | '/forgot-password' | '/login'
+  fullPaths:
+    | '/'
+    | '/app'
+    | '/forgot-password'
+    | '/login'
+    | '/app/admin/'
+    | '/app/distributor/'
+    | '/app/investor/'
+    | '/app/rm/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/app' | '/forgot-password' | '/login'
-  id: '__root__' | '/' | '/app' | '/forgot-password' | '/login'
+  to:
+    | '/'
+    | '/app'
+    | '/forgot-password'
+    | '/login'
+    | '/app/admin'
+    | '/app/distributor'
+    | '/app/investor'
+    | '/app/rm'
+  id:
+    | '__root__'
+    | '/'
+    | '/app'
+    | '/forgot-password'
+    | '/login'
+    | '/app/admin/'
+    | '/app/distributor/'
+    | '/app/investor/'
+    | '/app/rm/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
-  AppRoute: typeof AppRoute
+  AppRoute: typeof AppRouteWithChildren
   ForgotPasswordRoute: typeof ForgotPasswordRoute
   LoginRoute: typeof LoginRoute
 }
@@ -99,12 +160,56 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/app/rm/': {
+      id: '/app/rm/'
+      path: '/rm'
+      fullPath: '/app/rm/'
+      preLoaderRoute: typeof AppRmIndexRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/app/investor/': {
+      id: '/app/investor/'
+      path: '/investor'
+      fullPath: '/app/investor/'
+      preLoaderRoute: typeof AppInvestorIndexRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/app/distributor/': {
+      id: '/app/distributor/'
+      path: '/distributor'
+      fullPath: '/app/distributor/'
+      preLoaderRoute: typeof AppDistributorIndexRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/app/admin/': {
+      id: '/app/admin/'
+      path: '/admin'
+      fullPath: '/app/admin/'
+      preLoaderRoute: typeof AppAdminIndexRouteImport
+      parentRoute: typeof AppRoute
+    }
   }
 }
 
+interface AppRouteChildren {
+  AppAdminIndexRoute: typeof AppAdminIndexRoute
+  AppDistributorIndexRoute: typeof AppDistributorIndexRoute
+  AppInvestorIndexRoute: typeof AppInvestorIndexRoute
+  AppRmIndexRoute: typeof AppRmIndexRoute
+}
+
+const AppRouteChildren: AppRouteChildren = {
+  AppAdminIndexRoute: AppAdminIndexRoute,
+  AppDistributorIndexRoute: AppDistributorIndexRoute,
+  AppInvestorIndexRoute: AppInvestorIndexRoute,
+  AppRmIndexRoute: AppRmIndexRoute,
+}
+
+const AppRouteWithChildren = AppRoute._addFileChildren(AppRouteChildren)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
-  AppRoute: AppRoute,
+  AppRoute: AppRouteWithChildren,
   ForgotPasswordRoute: ForgotPasswordRoute,
   LoginRoute: LoginRoute,
 }
