@@ -23,6 +23,10 @@ import { Route as AppInvestorTransactionsRouteImport } from './routes/app.invest
 import { Route as AppInvestorProfileRouteImport } from './routes/app.investor.profile'
 import { Route as AppInvestorPortfolioRouteImport } from './routes/app.investor.portfolio'
 import { Route as AppInvestorExploreRouteImport } from './routes/app.investor.explore'
+import { Route as AppAdminUsersRouteImport } from './routes/app.admin.users'
+import { Route as AppAdminSystemRouteImport } from './routes/app.admin.system'
+import { Route as AppAdminPayoutsRouteImport } from './routes/app.admin.payouts'
+import { Route as AppAdminCommissionsRouteImport } from './routes/app.admin.commissions'
 import { Route as AppInvestorOrdersSwitchRouteImport } from './routes/app.investor.orders.switch'
 import { Route as AppInvestorOrdersSipRouteImport } from './routes/app.investor.orders.sip'
 import { Route as AppInvestorOrdersRedeemRouteImport } from './routes/app.investor.orders.redeem'
@@ -98,6 +102,26 @@ const AppInvestorExploreRoute = AppInvestorExploreRouteImport.update({
   path: '/investor/explore',
   getParentRoute: () => AppRoute,
 } as any)
+const AppAdminUsersRoute = AppAdminUsersRouteImport.update({
+  id: '/admin/users',
+  path: '/admin/users',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppAdminSystemRoute = AppAdminSystemRouteImport.update({
+  id: '/admin/system',
+  path: '/admin/system',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppAdminPayoutsRoute = AppAdminPayoutsRouteImport.update({
+  id: '/admin/payouts',
+  path: '/admin/payouts',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppAdminCommissionsRoute = AppAdminCommissionsRouteImport.update({
+  id: '/admin/commissions',
+  path: '/admin/commissions',
+  getParentRoute: () => AppRoute,
+} as any)
 const AppInvestorOrdersSwitchRoute = AppInvestorOrdersSwitchRouteImport.update({
   id: '/investor/orders/switch',
   path: '/investor/orders/switch',
@@ -127,6 +151,10 @@ export interface FileRoutesByFullPath {
   '/login': typeof LoginRoute
   '/app/notifications': typeof AppNotificationsRoute
   '/app/settings': typeof AppSettingsRoute
+  '/app/admin/commissions': typeof AppAdminCommissionsRoute
+  '/app/admin/payouts': typeof AppAdminPayoutsRoute
+  '/app/admin/system': typeof AppAdminSystemRoute
+  '/app/admin/users': typeof AppAdminUsersRoute
   '/app/investor/explore': typeof AppInvestorExploreRoute
   '/app/investor/portfolio': typeof AppInvestorPortfolioRoute
   '/app/investor/profile': typeof AppInvestorProfileRoute
@@ -147,6 +175,10 @@ export interface FileRoutesByTo {
   '/login': typeof LoginRoute
   '/app/notifications': typeof AppNotificationsRoute
   '/app/settings': typeof AppSettingsRoute
+  '/app/admin/commissions': typeof AppAdminCommissionsRoute
+  '/app/admin/payouts': typeof AppAdminPayoutsRoute
+  '/app/admin/system': typeof AppAdminSystemRoute
+  '/app/admin/users': typeof AppAdminUsersRoute
   '/app/investor/explore': typeof AppInvestorExploreRoute
   '/app/investor/portfolio': typeof AppInvestorPortfolioRoute
   '/app/investor/profile': typeof AppInvestorProfileRoute
@@ -168,6 +200,10 @@ export interface FileRoutesById {
   '/login': typeof LoginRoute
   '/app/notifications': typeof AppNotificationsRoute
   '/app/settings': typeof AppSettingsRoute
+  '/app/admin/commissions': typeof AppAdminCommissionsRoute
+  '/app/admin/payouts': typeof AppAdminPayoutsRoute
+  '/app/admin/system': typeof AppAdminSystemRoute
+  '/app/admin/users': typeof AppAdminUsersRoute
   '/app/investor/explore': typeof AppInvestorExploreRoute
   '/app/investor/portfolio': typeof AppInvestorPortfolioRoute
   '/app/investor/profile': typeof AppInvestorProfileRoute
@@ -190,6 +226,10 @@ export interface FileRouteTypes {
     | '/login'
     | '/app/notifications'
     | '/app/settings'
+    | '/app/admin/commissions'
+    | '/app/admin/payouts'
+    | '/app/admin/system'
+    | '/app/admin/users'
     | '/app/investor/explore'
     | '/app/investor/portfolio'
     | '/app/investor/profile'
@@ -210,6 +250,10 @@ export interface FileRouteTypes {
     | '/login'
     | '/app/notifications'
     | '/app/settings'
+    | '/app/admin/commissions'
+    | '/app/admin/payouts'
+    | '/app/admin/system'
+    | '/app/admin/users'
     | '/app/investor/explore'
     | '/app/investor/portfolio'
     | '/app/investor/profile'
@@ -230,6 +274,10 @@ export interface FileRouteTypes {
     | '/login'
     | '/app/notifications'
     | '/app/settings'
+    | '/app/admin/commissions'
+    | '/app/admin/payouts'
+    | '/app/admin/system'
+    | '/app/admin/users'
     | '/app/investor/explore'
     | '/app/investor/portfolio'
     | '/app/investor/profile'
@@ -351,6 +399,34 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppInvestorExploreRouteImport
       parentRoute: typeof AppRoute
     }
+    '/app/admin/users': {
+      id: '/app/admin/users'
+      path: '/admin/users'
+      fullPath: '/app/admin/users'
+      preLoaderRoute: typeof AppAdminUsersRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/app/admin/system': {
+      id: '/app/admin/system'
+      path: '/admin/system'
+      fullPath: '/app/admin/system'
+      preLoaderRoute: typeof AppAdminSystemRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/app/admin/payouts': {
+      id: '/app/admin/payouts'
+      path: '/admin/payouts'
+      fullPath: '/app/admin/payouts'
+      preLoaderRoute: typeof AppAdminPayoutsRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/app/admin/commissions': {
+      id: '/app/admin/commissions'
+      path: '/admin/commissions'
+      fullPath: '/app/admin/commissions'
+      preLoaderRoute: typeof AppAdminCommissionsRouteImport
+      parentRoute: typeof AppRoute
+    }
     '/app/investor/orders/switch': {
       id: '/app/investor/orders/switch'
       path: '/investor/orders/switch'
@@ -385,6 +461,10 @@ declare module '@tanstack/react-router' {
 interface AppRouteChildren {
   AppNotificationsRoute: typeof AppNotificationsRoute
   AppSettingsRoute: typeof AppSettingsRoute
+  AppAdminCommissionsRoute: typeof AppAdminCommissionsRoute
+  AppAdminPayoutsRoute: typeof AppAdminPayoutsRoute
+  AppAdminSystemRoute: typeof AppAdminSystemRoute
+  AppAdminUsersRoute: typeof AppAdminUsersRoute
   AppInvestorExploreRoute: typeof AppInvestorExploreRoute
   AppInvestorPortfolioRoute: typeof AppInvestorPortfolioRoute
   AppInvestorProfileRoute: typeof AppInvestorProfileRoute
@@ -402,6 +482,10 @@ interface AppRouteChildren {
 const AppRouteChildren: AppRouteChildren = {
   AppNotificationsRoute: AppNotificationsRoute,
   AppSettingsRoute: AppSettingsRoute,
+  AppAdminCommissionsRoute: AppAdminCommissionsRoute,
+  AppAdminPayoutsRoute: AppAdminPayoutsRoute,
+  AppAdminSystemRoute: AppAdminSystemRoute,
+  AppAdminUsersRoute: AppAdminUsersRoute,
   AppInvestorExploreRoute: AppInvestorExploreRoute,
   AppInvestorPortfolioRoute: AppInvestorPortfolioRoute,
   AppInvestorProfileRoute: AppInvestorProfileRoute,
