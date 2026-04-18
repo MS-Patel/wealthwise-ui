@@ -126,7 +126,10 @@ function AdminDashboard() {
             <CardContent>
               {overview && (
                 <AllocationDonut
-                  data={overview.aumByAsset}
+                  data={overview.aumByAsset.map((a, i) => {
+                    const total = overview.aumByAsset.reduce((s, x) => s + x.value, 0);
+                    return { key: `ac_${i}`, label: a.name, value: a.value, percent: (a.value / total) * 100 };
+                  })}
                   centerLabel="Total"
                   centerValue={formatCompactINR(overview.totalAum)}
                 />
