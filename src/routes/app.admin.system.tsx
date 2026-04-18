@@ -6,7 +6,7 @@ import { StatusBadge, type StatusTone } from "@/components/feedback/status-badge
 import { useIntegrationsQuery } from "@/features/admin/api";
 import { useAuthStore } from "@/stores/auth-store";
 import { ROLE_HOME } from "@/features/auth/role-routes";
-import { formatRelative } from "@/lib/relative-time";
+import { relativeTime } from "@/lib/relative-time";
 import { cn } from "@/lib/utils";
 import type { IntegrationStatus } from "@/types/admin";
 
@@ -50,7 +50,7 @@ function AdminSystemPage() {
                 </div>
                 <p className="mt-4 text-xs font-medium uppercase tracking-wider text-muted-foreground">{h.name}</p>
                 <p className="mt-1 font-display text-xl font-bold tabular-nums">{h.uptime.toFixed(2)}%</p>
-                <p className="text-xs text-muted-foreground">{h.latencyMs}ms · checked {formatRelative(h.lastCheck)}</p>
+                <p className="text-xs text-muted-foreground">{h.latencyMs}ms · checked {relativeTime(h.lastCheck)}</p>
               </CardContent>
             </Card>
           ))}
@@ -80,7 +80,7 @@ function AdminSystemPage() {
                   <div className="min-w-0 flex-1">
                     <div className="flex items-center justify-between gap-2">
                       <p className="text-sm font-semibold">{log.integration}</p>
-                      <p className="text-xs text-muted-foreground">{formatRelative(log.at)}</p>
+                      <p className="text-xs text-muted-foreground">{relativeTime(log.at)}</p>
                     </div>
                     <p className="mt-0.5 text-sm text-muted-foreground">{log.message}</p>
                   </div>
