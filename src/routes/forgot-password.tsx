@@ -16,8 +16,8 @@ import { forgotPasswordSchema, type ForgotPasswordFormValues } from "@/features/
 export const Route = createFileRoute("/forgot-password")({
   head: () => ({
     meta: [
-      { title: "Reset password — WealthOS" },
-      { name: "description", content: "Reset your WealthOS account password." },
+      { title: "Reset password — BuyBestFin" },
+      { name: "description", content: "Reset your BuyBestFin account password." },
     ],
   }),
   component: ForgotPasswordPage,

@@ -22,7 +22,7 @@ export const Route = createFileRoute("/app/investor/")({
     // Allow RM/Distributor through when impersonating an investor
     if (user && user.role !== "investor" && !impersonating) throw redirect({ to: ROLE_HOME[user.role] });
   },
-  head: () => ({ meta: [{ title: "Investor dashboard — WealthOS" }] }),
+  head: () => ({ meta: [{ title: "Investor dashboard — BuyBestFin" }] }),
   component: InvestorDashboard,
 });
 

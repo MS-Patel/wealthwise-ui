@@ -19,7 +19,7 @@ export const Route = createFileRoute("/app/settings")({
     const { isAuthenticated } = useAuthStore.getState();
     if (!isAuthenticated) throw redirect({ to: "/login" });
   },
-  head: () => ({ meta: [{ title: "Settings — WealthOS" }] }),
+  head: () => ({ meta: [{ title: "Settings — BuyBestFin" }] }),
   component: SettingsPage,
 });
 

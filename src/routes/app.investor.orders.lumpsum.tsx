@@ -36,7 +36,7 @@ export const Route = createFileRoute("/app/investor/orders/lumpsum")({
     const { user } = useAuthStore.getState();
     if (user && user.role !== "investor") throw redirect({ to: ROLE_HOME[user.role] });
   },
-  head: () => ({ meta: [{ title: "Lumpsum Purchase — WealthOS" }] }),
+  head: () => ({ meta: [{ title: "Lumpsum Purchase — BuyBestFin" }] }),
   component: LumpsumWizard,
 });
 

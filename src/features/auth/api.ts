@@ -21,7 +21,7 @@ import type {
 const MOCK_USERS: Record<UserRole, User> = {
   investor: {
     id: "usr_investor_001",
-    email: "investor@wealthos.dev",
+    email: "investor@buybestfin.dev",
     fullName: "Aanya Sharma",
     role: "investor",
     kycStatus: "verified",
@@ -30,7 +30,7 @@ const MOCK_USERS: Record<UserRole, User> = {
   },
   admin: {
     id: "usr_admin_001",
-    email: "admin@wealthos.dev",
+    email: "admin@buybestfin.dev",
     fullName: "Vikram Mehta",
     role: "admin",
     phone: "+91 99887 76655",
@@ -38,7 +38,7 @@ const MOCK_USERS: Record<UserRole, User> = {
   },
   rm: {
     id: "usr_rm_001",
-    email: "rm@wealthos.dev",
+    email: "rm@buybestfin.dev",
     fullName: "Priya Nair",
     role: "rm",
     phone: "+91 90000 11111",
@@ -46,7 +46,7 @@ const MOCK_USERS: Record<UserRole, User> = {
   },
   distributor: {
     id: "usr_dist_001",
-    email: "distributor@wealthos.dev",
+    email: "distributor@buybestfin.dev",
     fullName: "Rohan Kapoor",
     role: "distributor",
     phone: "+91 91111 22222",

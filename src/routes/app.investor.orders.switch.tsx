@@ -39,7 +39,7 @@ export const Route = createFileRoute("/app/investor/orders/switch")({
     const { user } = useAuthStore.getState();
     if (user && user.role !== "investor") throw redirect({ to: ROLE_HOME[user.role] });
   },
-  head: () => ({ meta: [{ title: "Switch funds — WealthOS" }] }),
+  head: () => ({ meta: [{ title: "Switch funds — BuyBestFin" }] }),
   component: SwitchWizard,
 });
 

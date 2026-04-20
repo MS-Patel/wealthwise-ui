@@ -20,7 +20,7 @@ export const Route = createFileRoute("/app/investor/portfolio")({
     const { user } = useAuthStore.getState();
     if (user && user.role !== "investor") throw redirect({ to: ROLE_HOME[user.role] });
   },
-  head: () => ({ meta: [{ title: "Portfolio — WealthOS" }] }),
+  head: () => ({ meta: [{ title: "Portfolio — BuyBestFin" }] }),
   component: PortfolioPage,
 });
 

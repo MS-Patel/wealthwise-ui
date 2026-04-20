@@ -50,7 +50,7 @@ export const Route = createFileRoute("/app/investor/orders/sip")({
     const { user } = useAuthStore.getState();
     if (user && user.role !== "investor") throw redirect({ to: ROLE_HOME[user.role] });
   },
-  head: () => ({ meta: [{ title: "Start a SIP — WealthOS" }] }),
+  head: () => ({ meta: [{ title: "Start a SIP — BuyBestFin" }] }),
   component: SipWizard,
 });
 
@@ -540,7 +540,7 @@ function SipWizard() {
               <div className="flex items-start gap-3 rounded-lg border border-info/20 bg-info/5 p-4">
                 <ShieldCheck className="mt-0.5 h-4 w-4 shrink-0 text-info" />
                 <p className="text-xs text-muted-foreground">
-                  By confirming, you authorize WealthOS to debit your bank account for the installment amount on the
+                  By confirming, you authorize BuyBestFin to debit your bank account for the installment amount on the
                   scheduled date. You can pause or cancel the SIP anytime.
                 </p>
               </div>

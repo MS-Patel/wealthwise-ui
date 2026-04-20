@@ -12,7 +12,7 @@ export const Route = createFileRoute("/app/rm/")({
     const { user } = useAuthStore.getState();
     if (user && user.role !== "rm") throw redirect({ to: ROLE_HOME[user.role] });
   },
-  head: () => ({ meta: [{ title: "Relationship Manager — WealthOS" }] }),
+  head: () => ({ meta: [{ title: "Relationship Manager — BuyBestFin" }] }),
   component: RmDashboard,
 });
 

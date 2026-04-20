@@ -38,7 +38,7 @@ function buildUsers(): PlatformUser[] {
     out.push({
       id: `usr_${i.toString().padStart(4, "0")}`,
       fullName: `${fn} ${ln}`,
-      email: `${fn.toLowerCase()}.${ln.toLowerCase()}${i}@wealthos.app`,
+      email: `${fn.toLowerCase()}.${ln.toLowerCase()}${i}@buybestfin.app`,
       role,
       kycStatus: KYC[Math.floor(r() * KYC.length)]!,
       status: STATUS[Math.floor(r() * STATUS.length)]!,

@@ -28,7 +28,7 @@ export const Route = createFileRoute("/app/investor/transactions")({
     const { user } = useAuthStore.getState();
     if (user && user.role !== "investor") throw redirect({ to: ROLE_HOME[user.role] });
   },
-  head: () => ({ meta: [{ title: "Transactions — WealthOS" }] }),
+  head: () => ({ meta: [{ title: "Transactions — BuyBestFin" }] }),
   component: TransactionsPage,
 });
 

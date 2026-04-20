@@ -21,7 +21,7 @@ export const Route = createFileRoute("/app/investor/profile")({
     const { user } = useAuthStore.getState();
     if (user && user.role !== "investor") throw redirect({ to: ROLE_HOME[user.role] });
   },
-  head: () => ({ meta: [{ title: "KYC & Profile — WealthOS" }] }),
+  head: () => ({ meta: [{ title: "KYC & Profile — BuyBestFin" }] }),
   component: ProfilePage,
 });
 

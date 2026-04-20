@@ -25,7 +25,7 @@ export const Route = createFileRoute("/app/admin/")({
     const { user } = useAuthStore.getState();
     if (user && user.role !== "admin") throw redirect({ to: ROLE_HOME[user.role] });
   },
-  head: () => ({ meta: [{ title: "Admin overview — WealthOS" }] }),
+  head: () => ({ meta: [{ title: "Admin overview — BuyBestFin" }] }),
   component: AdminDashboard,
 });
 

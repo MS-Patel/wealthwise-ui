@@ -44,8 +44,8 @@ export const Route = createFileRoute("/login")({
   validateSearch: searchSchema,
   head: () => ({
     meta: [
-      { title: "Sign in — WealthOS" },
-      { name: "description", content: "Sign in to your WealthOS account." },
+      { title: "Sign in — BuyBestFin" },
+      { name: "description", content: "Sign in to your BuyBestFin account." },
     ],
   }),
   component: LoginPage,
@@ -93,7 +93,7 @@ function LoginPage() {
             </Tabs>
 
             <p className="mt-8 text-center text-xs text-muted-foreground">
-              By signing in you agree to WealthOS{" "}
+              By signing in you agree to BuyBestFin{" "}
               <a className="font-medium text-foreground underline-offset-4 hover:underline">Terms</a>{" "}
               and{" "}
               <a className="font-medium text-foreground underline-offset-4 hover:underline">Privacy Policy</a>.
@@ -175,7 +175,7 @@ function PasswordForm({ onSuccess, setSession }: FormProps) {
 
   const form = useForm<LoginFormValues>({
     resolver: zodResolver(loginSchema),
-    defaultValues: { email: "investor@wealthos.dev", password: "demo1234", role: "investor" },
+    defaultValues: { email: "investor@buybestfin.dev", password: "demo1234", role: "investor" },
   });
 
   const onSubmit = form.handleSubmit(async (values) => {

@@ -23,7 +23,7 @@ export const Route = createFileRoute("/app/notifications")({
     const { isAuthenticated } = useAuthStore.getState();
     if (!isAuthenticated) throw redirect({ to: "/login" });
   },
-  head: () => ({ meta: [{ title: "Notifications — WealthOS" }] }),
+  head: () => ({ meta: [{ title: "Notifications — BuyBestFin" }] }),
   component: NotificationsPage,
 });
 

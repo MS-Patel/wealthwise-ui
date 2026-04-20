@@ -39,7 +39,7 @@ export const Route = createFileRoute("/app/investor/orders/redeem")({
     const { user } = useAuthStore.getState();
     if (user && user.role !== "investor") throw redirect({ to: ROLE_HOME[user.role] });
   },
-  head: () => ({ meta: [{ title: "Redeem — WealthOS" }] }),
+  head: () => ({ meta: [{ title: "Redeem — BuyBestFin" }] }),
   component: RedeemWizard,
 });
 

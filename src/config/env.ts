@@ -4,7 +4,7 @@
  */
 
 const API_BASE_URL =
-  (import.meta.env.VITE_API_BASE_URL as string | undefined) ?? "https://api.wealthos.example.com";
+  (import.meta.env.VITE_API_BASE_URL as string | undefined) ?? "https://api.buybestfin.example.com";
 
 const USE_MOCK_API =
   (import.meta.env.VITE_USE_MOCK_API as string | undefined) !== "false";
@@ -12,9 +12,9 @@ const USE_MOCK_API =
 export const env = {
   API_BASE_URL,
   USE_MOCK_API,
-  APP_NAME: "WealthOS",
-  TOKEN_STORAGE_KEY: "wealthos.tokens",
-  AUTH_STORAGE_KEY: "wealthos.auth",
+  APP_NAME: "BuyBestFin",
+  TOKEN_STORAGE_KEY: "buybestfin.tokens",
+  AUTH_STORAGE_KEY: "buybestfin.auth",
 } as const;
 
 export type Env = typeof env;

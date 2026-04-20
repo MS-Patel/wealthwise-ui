@@ -12,7 +12,7 @@ export const Route = createFileRoute("/app/distributor/")({
     const { user } = useAuthStore.getState();
     if (user && user.role !== "distributor") throw redirect({ to: ROLE_HOME[user.role] });
   },
-  head: () => ({ meta: [{ title: "Distributor — WealthOS" }] }),
+  head: () => ({ meta: [{ title: "Distributor — BuyBestFin" }] }),
   component: DistributorDashboard,
 });
 
