@@ -5,8 +5,9 @@
 @custom-variant dark (&:is(.dark *));
 
 /*
- * WealthOS — Mutual Fund Platform Design System
- * Deep navy + emerald accents. Trust-first fintech aesthetic.
+ * BuyBestFin — Mutual Fund Platform Design System
+ * Brand: blue → green gradient (matches BuyBestFin logo).
+ * By Navinchandra Securities (ARN: 147231).
  * All colors in oklch. Never use raw colors in components.
  */
 
@@ -72,134 +73,134 @@
   --radius: 0.75rem;
 
   /* Surfaces */
-  --background: oklch(0.985 0.005 240);
-  --foreground: oklch(0.18 0.04 250);
+  --background: oklch(0.985 0.006 230);
+  --foreground: oklch(0.2 0.05 240);
   --card: oklch(1 0 0);
-  --card-foreground: oklch(0.18 0.04 250);
+  --card-foreground: oklch(0.2 0.05 240);
   --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.18 0.04 250);
+  --popover-foreground: oklch(0.2 0.05 240);
 
-  /* Brand: deep navy */
-  --primary: oklch(0.24 0.07 258);
-  --primary-foreground: oklch(0.985 0.005 240);
-  --primary-glow: oklch(0.42 0.13 258);
+  /* Brand: BuyBestFin blue */
+  --primary: oklch(0.5 0.17 245);
+  --primary-foreground: oklch(0.99 0.005 240);
+  --primary-glow: oklch(0.62 0.16 235);
 
-  /* Emerald accent */
-  --accent: oklch(0.62 0.16 158);
-  --accent-foreground: oklch(0.99 0.01 158);
+  /* Brand: BuyBestFin green accent */
+  --accent: oklch(0.68 0.17 145);
+  --accent-foreground: oklch(0.16 0.04 145);
 
-  --secondary: oklch(0.96 0.01 250);
-  --secondary-foreground: oklch(0.24 0.07 258);
+  --secondary: oklch(0.96 0.012 230);
+  --secondary-foreground: oklch(0.28 0.08 245);
 
-  --muted: oklch(0.96 0.008 250);
-  --muted-foreground: oklch(0.5 0.025 255);
+  --muted: oklch(0.96 0.01 230);
+  --muted-foreground: oklch(0.5 0.025 240);
 
   --destructive: oklch(0.58 0.22 27);
   --destructive-foreground: oklch(0.99 0.005 0);
 
-  --success: oklch(0.62 0.16 158);
-  --success-foreground: oklch(0.99 0.01 158);
+  --success: oklch(0.65 0.17 145);
+  --success-foreground: oklch(0.16 0.04 145);
   --warning: oklch(0.78 0.16 75);
   --warning-foreground: oklch(0.2 0.05 75);
-  --info: oklch(0.62 0.14 235);
+  --info: oklch(0.6 0.16 235);
   --info-foreground: oklch(0.99 0.01 235);
 
   /* Semantic finance colors */
-  --profit: oklch(0.62 0.16 158);
+  --profit: oklch(0.65 0.17 145);
   --loss: oklch(0.58 0.22 27);
   --pending: oklch(0.78 0.16 75);
 
-  --border: oklch(0.92 0.012 250);
-  --input: oklch(0.92 0.012 250);
-  --ring: oklch(0.42 0.13 258);
+  --border: oklch(0.92 0.012 230);
+  --input: oklch(0.92 0.012 230);
+  --ring: oklch(0.5 0.17 245);
 
-  --chart-1: oklch(0.42 0.13 258);
-  --chart-2: oklch(0.62 0.16 158);
-  --chart-3: oklch(0.7 0.14 75);
-  --chart-4: oklch(0.62 0.14 235);
+  --chart-1: oklch(0.5 0.17 245);
+  --chart-2: oklch(0.68 0.17 145);
+  --chart-3: oklch(0.78 0.16 75);
+  --chart-4: oklch(0.6 0.16 200);
   --chart-5: oklch(0.58 0.22 27);
 
-  /* Sidebar — deep navy */
-  --sidebar: oklch(0.18 0.04 258);
-  --sidebar-foreground: oklch(0.85 0.02 250);
-  --sidebar-primary: oklch(0.62 0.16 158);
-  --sidebar-primary-foreground: oklch(0.99 0.01 158);
-  --sidebar-accent: oklch(0.24 0.07 258);
-  --sidebar-accent-foreground: oklch(0.985 0.005 240);
-  --sidebar-border: oklch(0.26 0.05 258);
-  --sidebar-ring: oklch(0.62 0.16 158);
+  /* Sidebar — deep brand blue */
+  --sidebar: oklch(0.22 0.08 245);
+  --sidebar-foreground: oklch(0.92 0.015 230);
+  --sidebar-primary: oklch(0.68 0.17 145);
+  --sidebar-primary-foreground: oklch(0.16 0.04 145);
+  --sidebar-accent: oklch(0.3 0.1 245);
+  --sidebar-accent-foreground: oklch(0.99 0.005 230);
+  --sidebar-border: oklch(0.32 0.08 245);
+  --sidebar-ring: oklch(0.68 0.17 145);
 
-  /* Gradients & shadows */
-  --gradient-brand: linear-gradient(135deg, oklch(0.24 0.07 258), oklch(0.42 0.13 258));
-  --gradient-accent: linear-gradient(135deg, oklch(0.62 0.16 158), oklch(0.7 0.14 175));
-  --gradient-surface: linear-gradient(180deg, oklch(0.99 0.005 240), oklch(0.96 0.01 250));
-  --shadow-elegant: 0 10px 40px -12px color-mix(in oklab, oklch(0.24 0.07 258) 22%, transparent);
-  --shadow-glow: 0 0 32px color-mix(in oklab, oklch(0.62 0.16 158) 35%, transparent);
-  --shadow-card: 0 1px 2px color-mix(in oklab, oklch(0.18 0.04 250) 6%, transparent),
-                 0 8px 24px -8px color-mix(in oklab, oklch(0.18 0.04 250) 8%, transparent);
+  /* Gradients & shadows — BuyBestFin signature blue→green */
+  --gradient-brand: linear-gradient(135deg, oklch(0.5 0.17 245), oklch(0.68 0.17 145));
+  --gradient-accent: linear-gradient(135deg, oklch(0.55 0.16 235), oklch(0.7 0.17 150));
+  --gradient-surface: linear-gradient(180deg, oklch(0.99 0.006 230), oklch(0.96 0.012 230));
+  --shadow-elegant: 0 10px 40px -12px color-mix(in oklab, oklch(0.5 0.17 245) 25%, transparent);
+  --shadow-glow: 0 0 32px color-mix(in oklab, oklch(0.68 0.17 145) 38%, transparent);
+  --shadow-card: 0 1px 2px color-mix(in oklab, oklch(0.2 0.05 240) 6%, transparent),
+                 0 8px 24px -8px color-mix(in oklab, oklch(0.2 0.05 240) 8%, transparent);
 
   --transition-smooth: cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .dark {
-  --background: oklch(0.16 0.035 258);
-  --foreground: oklch(0.96 0.01 250);
-  --card: oklch(0.21 0.045 258);
-  --card-foreground: oklch(0.96 0.01 250);
-  --popover: oklch(0.21 0.045 258);
-  --popover-foreground: oklch(0.96 0.01 250);
+  --background: oklch(0.17 0.04 245);
+  --foreground: oklch(0.96 0.012 230);
+  --card: oklch(0.22 0.05 245);
+  --card-foreground: oklch(0.96 0.012 230);
+  --popover: oklch(0.22 0.05 245);
+  --popover-foreground: oklch(0.96 0.012 230);
 
-  --primary: oklch(0.7 0.14 158);
-  --primary-foreground: oklch(0.16 0.035 258);
-  --primary-glow: oklch(0.62 0.16 158);
+  --primary: oklch(0.7 0.16 150);
+  --primary-foreground: oklch(0.17 0.04 245);
+  --primary-glow: oklch(0.62 0.16 145);
 
-  --accent: oklch(0.62 0.16 158);
-  --accent-foreground: oklch(0.16 0.035 258);
+  --accent: oklch(0.7 0.16 150);
+  --accent-foreground: oklch(0.17 0.04 245);
 
-  --secondary: oklch(0.26 0.05 258);
-  --secondary-foreground: oklch(0.96 0.01 250);
+  --secondary: oklch(0.27 0.06 245);
+  --secondary-foreground: oklch(0.96 0.012 230);
 
-  --muted: oklch(0.24 0.045 258);
-  --muted-foreground: oklch(0.7 0.025 250);
+  --muted: oklch(0.25 0.05 245);
+  --muted-foreground: oklch(0.72 0.025 230);
 
   --destructive: oklch(0.65 0.22 27);
   --destructive-foreground: oklch(0.99 0.005 0);
 
-  --success: oklch(0.7 0.16 158);
-  --success-foreground: oklch(0.16 0.035 258);
+  --success: oklch(0.7 0.16 150);
+  --success-foreground: oklch(0.17 0.04 245);
   --warning: oklch(0.78 0.16 75);
   --warning-foreground: oklch(0.2 0.05 75);
   --info: oklch(0.7 0.14 235);
-  --info-foreground: oklch(0.16 0.035 258);
+  --info-foreground: oklch(0.17 0.04 245);
 
-  --profit: oklch(0.7 0.16 158);
+  --profit: oklch(0.7 0.16 150);
   --loss: oklch(0.7 0.2 27);
   --pending: oklch(0.78 0.16 75);
 
   --border: oklch(1 0 0 / 8%);
   --input: oklch(1 0 0 / 12%);
-  --ring: oklch(0.62 0.16 158);
+  --ring: oklch(0.68 0.17 145);
 
-  --chart-1: oklch(0.62 0.16 158);
-  --chart-2: oklch(0.7 0.14 235);
+  --chart-1: oklch(0.6 0.17 240);
+  --chart-2: oklch(0.7 0.16 150);
   --chart-3: oklch(0.78 0.16 75);
-  --chart-4: oklch(0.65 0.18 295);
+  --chart-4: oklch(0.65 0.18 200);
   --chart-5: oklch(0.7 0.2 27);
 
-  --sidebar: oklch(0.13 0.03 258);
-  --sidebar-foreground: oklch(0.85 0.02 250);
-  --sidebar-primary: oklch(0.62 0.16 158);
-  --sidebar-primary-foreground: oklch(0.13 0.03 258);
-  --sidebar-accent: oklch(0.21 0.045 258);
-  --sidebar-accent-foreground: oklch(0.96 0.01 250);
+  --sidebar: oklch(0.14 0.04 245);
+  --sidebar-foreground: oklch(0.88 0.02 230);
+  --sidebar-primary: oklch(0.7 0.16 150);
+  --sidebar-primary-foreground: oklch(0.14 0.04 245);
+  --sidebar-accent: oklch(0.22 0.05 245);
+  --sidebar-accent-foreground: oklch(0.96 0.012 230);
   --sidebar-border: oklch(1 0 0 / 6%);
-  --sidebar-ring: oklch(0.62 0.16 158);
+  --sidebar-ring: oklch(0.68 0.17 145);
 
-  --gradient-brand: linear-gradient(135deg, oklch(0.21 0.045 258), oklch(0.42 0.13 258));
-  --gradient-accent: linear-gradient(135deg, oklch(0.62 0.16 158), oklch(0.7 0.14 175));
-  --gradient-surface: linear-gradient(180deg, oklch(0.16 0.035 258), oklch(0.21 0.045 258));
+  --gradient-brand: linear-gradient(135deg, oklch(0.32 0.1 245), oklch(0.55 0.15 175));
+  --gradient-accent: linear-gradient(135deg, oklch(0.55 0.16 235), oklch(0.7 0.17 150));
+  --gradient-surface: linear-gradient(180deg, oklch(0.17 0.04 245), oklch(0.22 0.05 245));
   --shadow-elegant: 0 10px 40px -12px color-mix(in oklab, oklch(0 0 0) 50%, transparent);
-  --shadow-glow: 0 0 32px color-mix(in oklab, oklch(0.62 0.16 158) 35%, transparent);
+  --shadow-glow: 0 0 32px color-mix(in oklab, oklch(0.7 0.16 150) 35%, transparent);
   --shadow-card: 0 1px 2px color-mix(in oklab, oklch(0 0 0) 30%, transparent),
                  0 8px 24px -8px color-mix(in oklab, oklch(0 0 0) 40%, transparent);
 }
