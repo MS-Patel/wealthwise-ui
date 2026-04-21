@@ -1,4 +1,5 @@
 import { useMemo, useState } from "react";
+import { Link } from "@tanstack/react-router";
 import { ArrowUpDown, Repeat2, TrendingDown, TrendingUp } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -155,7 +156,11 @@ export function HoldingsTable({ holdings }: HoldingsTableProps) {
                     {formatPercent(h.xirr)}
                   </TableCell>
                   <TableCell className="opacity-0 transition-opacity group-hover:opacity-100">
-                    <Button size="sm" variant="ghost">View</Button>
+                    <Button asChild size="sm" variant="ghost">
+                      <Link to="/app/investor/portfolio/$holdingId" params={{ holdingId: h.id }}>
+                        View
+                      </Link>
+                    </Button>
                   </TableCell>
                 </TableRow>
               ))
@@ -180,7 +185,12 @@ export function HoldingsTable({ holdings }: HoldingsTableProps) {
       {/* Mobile cards */}
       <div className="space-y-3 md:hidden">
         {rows.map((h) => (
-          <div key={h.id} className="rounded-xl border border-border bg-card p-4 shadow-card">
+          <Link
+            key={h.id}
+            to="/app/investor/portfolio/$holdingId"
+            params={{ holdingId: h.id }}
+            className="block rounded-xl border border-border bg-card p-4 shadow-card transition-shadow hover:shadow-elegant"
+          >
             <p className="font-semibold leading-snug">{h.schemeName}</p>
             <div className="mt-1 flex flex-wrap items-center gap-2 text-[11px] uppercase tracking-wider text-muted-foreground">
               {h.amc} · {h.category}

@@ -55,8 +55,8 @@ const investorNav: NavSection[] = [
   {
     label: "Plan",
     items: [
-      { label: "Goals", to: "/app/investor/goals", icon: Target, badge: "Soon" },
-      { label: "Tax Harvesting", to: "/app/investor/tax", icon: Calculator, badge: "Soon" },
+      { label: "Goals", to: "/app/investor/goals", icon: Target },
+      { label: "Tax Harvesting", to: "/app/investor/tax", icon: Calculator },
       { label: "AI Insights", to: "/app/investor/insights", icon: Sparkles, badge: "Beta" },
     ],
   },
