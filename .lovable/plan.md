@@ -1,38 +1,80 @@
 
-The user wants a fresh, unique theme that's lighter and better matches the BuyBestFin brand (blue→green gradient logo). Current dark sidebar (`oklch(0.22 0.08 245)` — deep navy) feels heavy. Let me design something distinctive.
 
-## Design direction
+# Investor Portal — Final Polish Plan
 
-**Concept: "Coastal Wealth"** — a light, airy fintech palette inspired by sea-glass and emerald, with the logo's blue→green gradient as the signature accent. Moves away from the standard navy-sidebar fintech look.
+The B2C investor portal spec is **~95% built**. All major routes exist: Auth (login/forgot), Dashboard, Portfolio (+holding detail), Explore, Transactions, Profile/KYC, Order wizards (Lumpsum/SIP/Redeem/Switch), Goals, Tax Harvesting, AI Insights, Notifications, Settings. Architecture (feature-sliced, Axios+TanStack Query hooks, Zustand stores, Zod schemas) already matches every constraint in section 3.
 
-### Key shifts from current theme
+This plan closes the remaining gaps and delivers a true "production-ready B2C" feel.
 
-| Token | Current | New |
-|---|---|---|
-| Background | Cool off-white `0.985 0.006 230` | Warm pearl `0.99 0.008 180` (subtle mint tint) |
-| Primary | Deep blue `0.5 0.17 245` | Teal-emerald `0.55 0.13 185` (sits between brand blue & green) |
-| Accent | Green `0.68 0.17 145` | Vibrant emerald `0.72 0.18 155` |
-| Sidebar | Dark navy `0.22 0.08 245` | **Light pearl** `0.97 0.012 190` with subtle teal border — no more dark sidebar |
-| Sidebar text | Light gray | Deep teal `0.25 0.07 200` |
-| Cards | Pure white | Pure white with warm border `0.93 0.015 180` |
-| Foreground | Cool dark `0.2 0.05 240` | Deep ocean `0.22 0.06 220` |
+## Gaps vs. spec
 
-### Signature touches
-- **Light sidebar** with active item using brand gradient (blue→emerald) — the unique differentiator
-- Hero gradient: `oklch(0.55 0.15 220) → oklch(0.7 0.17 160)` (ocean blue → mint emerald)
-- Subtle mint-tinted muted surfaces instead of cool gray
-- Soft teal-shadowed cards (`shadow-elegant` uses teal mix)
-- Dark mode: rich midnight-teal `0.18 0.04 210` (not pure navy) — warmer feel
+1. **Signup is missing.** Spec calls for "Login (Email/Password & OTP), Forgot Password, **Signup**." Login page only has sign-in.
+2. **Scheme detail page is missing.** Explore links to `SchemeCard` but there's no `/app/investor/explore/$schemeId` deep-dive (fund factsheet, NAV history, allocations, invest CTA).
+3. **Add-Bank & Add-Nominee flows are toast stubs** in `app.investor.profile.tsx` — should be working dialogs with React Hook Form + Zod validation against mock state.
+4. **Goals "New goal" wizard** is a toast stub — spec lists Goal-Based Investing under Future Prospects, and a working wizard rounds it out.
+5. **Compliance footer is missing** — required for a real MF distributor (ARN 147231, AMFI risk disclaimer, Navinchandra Securities legal info).
+6. **Landing route `/`** redirects straight to `/login`. For a B2C product, a public marketing landing (hero + features + CTAs to login/signup) is expected.
 
-### Charts
-Re-tune to harmonize: teal, emerald, soft amber, sky, coral — all jewel-toned, no flat blues.
+## Build plan (in order)
 
-## Files to edit
+### 1. Public marketing landing — `src/routes/index.tsx`
+Replace the redirect with a real landing page: hero with brand gradient + Playfair headline, 3-feature strip (Smart investing / Goal planning / Tax optimisation), trust bar (ARN, AMFI registered, BSE Star MF), CTAs to `/login` and `/signup`. Authenticated users still auto-redirect to their `ROLE_HOME`.
 
-1. **`src/styles.css`** — rewrite `:root` and `.dark` token blocks + gradients/shadows. No structural changes.
+### 2. Signup flow — `src/routes/signup.tsx` + auth additions
+- New route mirroring login's split layout (`BrandPanel` + form panel).
+- Zod schema in `src/features/auth/schemas.ts`: `signupSchema` (fullName, email, mobile, password, confirmPassword, agreeTerms).
+- `signup()` mock in `src/features/auth/api.ts` returning `AuthResult`, plus `useSignupMutation()`.
+- Link from login footer ("New to BuyBestFin? Create account").
 
-That's it. Single-file change. All components consume tokens, so the rebrand cascades automatically.
+### 3. Scheme detail page — `src/routes/app.investor.explore.$schemeId.tsx`
+Deep-dive page with: hero (scheme name, AMC, NAV, 1Y return badge, rating, risk pill), Recharts NAV trend (mock 1Y series generated from scheme data), key facts grid (AUM, expense ratio, exit load, min lumpsum/SIP, benchmark, fund manager), allocation donut (mock asset/sector mix), and sticky "Invest now" + "Start SIP" CTAs that route to wizards with `?schemeId=`. Wire `SchemeCard` rows to link here.
+
+### 4. Profile dialogs — bank + nominee
+In `app.investor.profile.tsx`, replace the two toast stubs with `Dialog` components:
+- **AddBankDialog**: form (bankName, accountNumber, ifsc, accountType) → optimistic update via local `useState` overlay on the query data, success toast.
+- **AddNomineeDialog**: form (name, relation, dob, sharePct) → same pattern; validation enforces total share ≤ 100%.
+- Both schemas live in `src/features/kyc/schemas.ts` (new file).
+
+### 5. Goal creation wizard — `GoalWizardDialog`
+Multi-step `Dialog` (3 steps via `wizard-stepper`): Pick category → Target & date → Monthly contribution & link funds. Append created goal to local store overlay; replace the toast in `app.investor.goals.tsx`. Schema in `src/features/goals/schemas.ts`.
+
+### 6. Global compliance footer — `src/components/layout/compliance-footer.tsx`
+Render inside `AppShell` below `<main>`: Navinchandra Securities · ARN 147231 · "Mutual fund investments are subject to market risks. Read all scheme-related documents carefully." · BSE Star MF logo placeholder · links to terms/privacy/grievance. Also render on the new public landing.
+
+### 7. Wire-up & nav updates
+- Add `Explore Schemes` row click to navigate to scheme detail.
+- `app.investor.portfolio.$holdingId.tsx` — add a "View scheme page" link to scheme detail.
+- No new sidebar items (scheme detail is reached from Explore, dialogs are inline).
+
+## Files
+
+**Created**
+- `src/routes/signup.tsx`
+- `src/routes/app.investor.explore.$schemeId.tsx`
+- `src/features/kyc/schemas.ts`
+- `src/features/kyc/components/add-bank-dialog.tsx`
+- `src/features/kyc/components/add-nominee-dialog.tsx`
+- `src/features/goals/schemas.ts`
+- `src/features/goals/components/goal-wizard-dialog.tsx`
+- `src/components/layout/compliance-footer.tsx`
+
+**Edited**
+- `src/routes/index.tsx` — replace redirect with marketing landing (auth users still redirect)
+- `src/routes/login.tsx` — add "Create account" link
+- `src/features/auth/schemas.ts` — add `signupSchema`
+- `src/features/auth/api.ts` — add `signup()` + `useSignupMutation()`
+- `src/routes/app.investor.profile.tsx` — wire AddBank/AddNominee dialogs
+- `src/routes/app.investor.goals.tsx` — wire GoalWizardDialog
+- `src/features/schemes/components/scheme-card.tsx` — link to scheme detail
+- `src/components/layout/app-shell.tsx` — mount compliance footer
+- `src/routes/app.investor.portfolio.$holdingId.tsx` — link to scheme detail
 
 ## Verification
-- Visually check sidebar (now light), investor dashboard cards, gradient hero strips on portfolio summary, and dark mode toggle.
-- Confirm contrast on sidebar active state and hero text remains AA.
+- `/` shows landing (logged-out) or redirects (logged-in)
+- `/signup` round-trips and lands on investor dashboard
+- Explore card → `/app/investor/explore/<id>` renders factsheet + chart
+- Bank/Nominee dialogs validate, persist locally, and close cleanly
+- Goal wizard creates a goal that appears in the list
+- Compliance footer visible on every authenticated page and on landing
+- All 4 order wizards still work end-to-end
+
