@@ -202,7 +202,7 @@ export function HoldingsTable({ holdings }: HoldingsTableProps) {
               <Field label="Gain" value={formatCompactINR(h.unrealizedGain)} positive={h.unrealizedGain >= 0} />
               <Field label="Return" value={formatPercent(h.returnPct)} positive={h.returnPct >= 0} />
             </div>
-          </div>
+          </Link>
         ))}
       </div>
     </div>
