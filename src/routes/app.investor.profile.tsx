@@ -222,6 +222,17 @@ function ProfilePage() {
           </>
         )}
       </div>
+      <AddBankDialog
+        open={bankOpen}
+        onOpenChange={setBankOpen}
+        onAdd={(b) => setExtraBanks((prev) => [...prev, b])}
+      />
+      <AddNomineeDialog
+        open={nomineeOpen}
+        onOpenChange={setNomineeOpen}
+        currentShareTotal={totalShare}
+        onAdd={(n) => setExtraNominees((prev) => [...prev, n])}
+      />
     </>
   );
 }
