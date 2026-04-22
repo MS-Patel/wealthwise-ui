@@ -66,6 +66,13 @@ export interface AuthResult {
   tokens: AuthTokens;
 }
 
+export interface SignupPayload {
+  fullName: string;
+  email: string;
+  mobile: string;
+  password: string;
+}
+
 export const authApi = {
   async login(credentials: LoginCredentials): Promise<AuthResult> {
     if (env.USE_MOCK_API) {
@@ -76,6 +83,23 @@ export const authApi = {
       return { user: { ...MOCK_USERS[credentials.role], email: credentials.email }, tokens: MOCK_TOKENS };
     }
     return api.post<AuthResult, LoginCredentials>("/auth/login/", credentials);
+  },
+
+  async signup(payload: SignupPayload): Promise<AuthResult> {
+    if (env.USE_MOCK_API) {
+      await wait(900);
+      const user: User = {
+        ...MOCK_USERS.investor,
+        id: `usr_investor_${Date.now()}`,
+        email: payload.email,
+        fullName: payload.fullName,
+        phone: payload.mobile,
+        kycStatus: "not_started",
+        createdAt: new Date().toISOString(),
+      };
+      return { user, tokens: MOCK_TOKENS };
+    }
+    return api.post<AuthResult, SignupPayload>("/auth/signup/", payload);
   },
 
   async loginWithOtp(payload: OtpLoginPayload): Promise<AuthResult> {
@@ -118,6 +142,10 @@ export const authApi = {
 
 export function useLoginMutation() {
   return useMutation({ mutationFn: (c: LoginCredentials) => authApi.login(c) });
+}
+
+export function useSignupMutation() {
+  return useMutation({ mutationFn: (p: SignupPayload) => authApi.signup(p) });
 }
 
 export function useOtpLoginMutation() {
