@@ -1,6 +1,6 @@
+import { useMemo, useState } from "react";
 import { createFileRoute, redirect } from "@tanstack/react-router";
 import { CreditCard, Mail, MapPin, Phone, Plus, ShieldCheck, UserPlus } from "lucide-react";
-import { toast } from "sonner";
 import { PageHeader } from "@/components/layout/page-header";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -9,12 +9,14 @@ import { Badge } from "@/components/ui/badge";
 import { StatusBadge, type StatusTone } from "@/components/feedback/status-badge";
 import { ChartSkeleton } from "@/components/feedback/skeletons";
 import { KycTimeline } from "@/features/kyc/components/kyc-timeline";
+import { AddBankDialog } from "@/features/kyc/components/add-bank-dialog";
+import { AddNomineeDialog } from "@/features/kyc/components/add-nominee-dialog";
 import { useKycOverviewQuery } from "@/features/kyc/api";
 import { useAuthStore } from "@/stores/auth-store";
 import { ROLE_HOME } from "@/features/auth/role-routes";
 import { formatDate } from "@/lib/format";
 import { cn } from "@/lib/utils";
-import type { KycOverallStatus } from "@/types/kyc";
+import type { BankAccount, KycOverallStatus, Nominee } from "@/types/kyc";
 
 export const Route = createFileRoute("/app/investor/profile")({
   beforeLoad: () => {
@@ -143,13 +145,13 @@ function ProfilePage() {
                   <Button
                     variant="outline"
                     className="gap-2"
-                    onClick={() => toast.info("Add bank account", { description: "Bank verification flow coming soon." })}
+                    onClick={() => setBankOpen(true)}
                   >
                     <Plus className="h-4 w-4" /> Add bank
                   </Button>
                 </div>
                 <div className="grid gap-3 lg:grid-cols-2">
-                  {data.bankAccounts.map((b) => (
+                  {banks.map((b) => (
                     <Card key={b.id} className={cn("shadow-card", b.isPrimary && "ring-1 ring-primary/30")}>
                       <CardContent className="flex items-start justify-between gap-3 p-5">
                         <div className="flex items-start gap-3">
@@ -184,18 +186,21 @@ function ProfilePage() {
                 <div className="flex items-center justify-between">
                   <div>
                     <h3 className="text-base font-semibold">Registered nominees</h3>
-                    <p className="text-sm text-muted-foreground">Total share allocated must equal 100%.</p>
+                    <p className="text-sm text-muted-foreground">
+                      Total share: <span className="font-semibold text-foreground">{totalShare}%</span> of 100%.
+                    </p>
                   </div>
                   <Button
                     variant="outline"
                     className="gap-2"
-                    onClick={() => toast.info("Add nominee", { description: "Nominee onboarding flow coming soon." })}
+                    onClick={() => setNomineeOpen(true)}
+                    disabled={totalShare >= 100}
                   >
                     <UserPlus className="h-4 w-4" /> Add nominee
                   </Button>
                 </div>
                 <div className="grid gap-3 lg:grid-cols-2">
-                  {data.nominees.map((n) => (
+                  {nominees.map((n) => (
                     <Card key={n.id} className="shadow-card">
                       <CardContent className="flex items-center justify-between gap-3 p-5">
                         <div>
@@ -217,6 +222,17 @@ function ProfilePage() {
           </>
         )}
       </div>
+      <AddBankDialog
+        open={bankOpen}
+        onOpenChange={setBankOpen}
+        onAdd={(b) => setExtraBanks((prev) => [...prev, b])}
+      />
+      <AddNomineeDialog
+        open={nomineeOpen}
+        onOpenChange={setNomineeOpen}
+        currentShareTotal={totalShare}
+        onAdd={(n) => setExtraNominees((prev) => [...prev, n])}
+      />
     </>
   );
 }

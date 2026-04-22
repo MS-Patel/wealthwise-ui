@@ -2,6 +2,7 @@ import { Outlet } from "@tanstack/react-router";
 import { AppSidebar } from "./app-sidebar";
 import { AppTopbar } from "./app-topbar";
 import { ImpersonationBanner } from "./impersonation-banner";
+import { ComplianceFooter } from "./compliance-footer";
 
 export function AppShell() {
   return (
@@ -13,6 +14,7 @@ export function AppShell() {
         <main className="flex-1">
           <Outlet />
         </main>
+        <ComplianceFooter />
       </div>
     </div>
   );
