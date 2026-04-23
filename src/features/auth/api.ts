@@ -7,51 +7,23 @@ import type {
   LoginCredentials,
   OtpLoginPayload,
   User,
-  UserRole,
 } from "@/types/auth";
 
 /**
- * Auth API surface.
+ * Auth API surface (B2C investor portal — single role).
  *
  * NOTE: While VITE_USE_MOCK_API is enabled (default in development), all
- * functions resolve with deterministic mock data. To wire up the real DRF
- * backend, set VITE_USE_MOCK_API=false and the calls fall through to axios.
+ * functions resolve with deterministic mock data.
  */
 
-const MOCK_USERS: Record<UserRole, User> = {
-  investor: {
-    id: "usr_investor_001",
-    email: "investor@buybestfin.dev",
-    fullName: "Aanya Sharma",
-    role: "investor",
-    kycStatus: "verified",
-    phone: "+91 98765 43210",
-    createdAt: "2023-04-12T10:00:00Z",
-  },
-  admin: {
-    id: "usr_admin_001",
-    email: "admin@buybestfin.dev",
-    fullName: "Vikram Mehta",
-    role: "admin",
-    phone: "+91 99887 76655",
-    createdAt: "2022-01-01T10:00:00Z",
-  },
-  rm: {
-    id: "usr_rm_001",
-    email: "rm@buybestfin.dev",
-    fullName: "Priya Nair",
-    role: "rm",
-    phone: "+91 90000 11111",
-    createdAt: "2023-08-20T10:00:00Z",
-  },
-  distributor: {
-    id: "usr_dist_001",
-    email: "distributor@buybestfin.dev",
-    fullName: "Rohan Kapoor",
-    role: "distributor",
-    phone: "+91 91111 22222",
-    createdAt: "2024-02-14T10:00:00Z",
-  },
+const MOCK_INVESTOR: User = {
+  id: "usr_investor_001",
+  email: "investor@buybestfin.dev",
+  fullName: "Aanya Sharma",
+  role: "investor",
+  kycStatus: "verified",
+  phone: "+91 98765 43210",
+  createdAt: "2023-04-12T10:00:00Z",
 };
 
 const MOCK_TOKENS: AuthTokens = {
@@ -80,7 +52,7 @@ export const authApi = {
       if (credentials.password.length < 6) {
         throw Object.assign(new Error("Invalid email or password"), { status: 401 });
       }
-      return { user: { ...MOCK_USERS[credentials.role], email: credentials.email }, tokens: MOCK_TOKENS };
+      return { user: { ...MOCK_INVESTOR, email: credentials.email }, tokens: MOCK_TOKENS };
     }
     return api.post<AuthResult, LoginCredentials>("/auth/login/", credentials);
   },
@@ -89,7 +61,7 @@ export const authApi = {
     if (env.USE_MOCK_API) {
       await wait(900);
       const user: User = {
-        ...MOCK_USERS.investor,
+        ...MOCK_INVESTOR,
         id: `usr_investor_${Date.now()}`,
         email: payload.email,
         fullName: payload.fullName,
@@ -108,7 +80,7 @@ export const authApi = {
       if (payload.otp !== "123456") {
         throw Object.assign(new Error("Invalid OTP. Use 123456 in mock mode."), { status: 401 });
       }
-      return { user: MOCK_USERS[payload.role], tokens: MOCK_TOKENS };
+      return { user: MOCK_INVESTOR, tokens: MOCK_TOKENS };
     }
     return api.post<AuthResult, OtpLoginPayload>("/auth/otp/verify/", payload);
   },
