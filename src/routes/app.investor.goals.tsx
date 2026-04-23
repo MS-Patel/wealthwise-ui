@@ -14,9 +14,8 @@ import {
   Target,
   TrendingUp,
 } from "lucide-react";
-import { toast } from "sonner";
-
 import { PageHeader } from "@/components/layout/page-header";
+import { GoalWizardDialog } from "@/features/goals/components/goal-wizard-dialog";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -76,11 +75,17 @@ type FilterKey = "all" | GoalStatus;
 function GoalsPage() {
   const { data, isLoading } = useGoalsOverviewQuery();
   const [filter, setFilter] = useState<FilterKey>("all");
+  const [wizardOpen, setWizardOpen] = useState(false);
+  const [extraGoals, setExtraGoals] = useState<Goal[]>([]);
+
+  const allGoals = useMemo<Goal[]>(() => {
+    if (!data) return [];
+    return [...extraGoals, ...data.goals];
+  }, [data, extraGoals]);
 
   const goals = useMemo(() => {
-    if (!data) return [];
-    return filter === "all" ? data.goals : data.goals.filter((g) => g.status === filter);
-  }, [data, filter]);
+    return filter === "all" ? allGoals : allGoals.filter((g) => g.status === filter);
+  }, [allGoals, filter]);
 
   return (
     <>
@@ -89,10 +94,7 @@ function GoalsPage() {
         title="Your financial goals"
         description="Map every SIP and holding to a life goal — and see exactly how close you are."
         actions={
-          <Button
-            className="gap-2"
-            onClick={() => toast.info("Goal wizard", { description: "Multi-step goal creation coming soon." })}
-          >
+          <Button className="gap-2" onClick={() => setWizardOpen(true)}>
             <Plus className="h-4 w-4" /> New goal
           </Button>
         }

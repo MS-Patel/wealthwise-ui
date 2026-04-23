@@ -5,6 +5,7 @@ import {
   ArrowLeft,
   ArrowUpRight,
   CalendarDays,
+  Compass,
   Repeat2,
   TrendingDown,
   TrendingUp,
@@ -107,6 +108,11 @@ function HoldingDetailPage() {
               <Button asChild variant="outline" className="gap-2">
                 <Link to="/app/investor/portfolio">
                   <ArrowLeft className="h-4 w-4" /> Portfolio
+                </Link>
+              </Button>
+              <Button asChild variant="ghost" className="gap-2">
+                <Link to="/app/investor/explore/$schemeId" params={{ schemeId: holding.schemeCode }}>
+                  <Compass className="h-4 w-4" /> View scheme page
                 </Link>
               </Button>
               <Button asChild variant="outline" className="gap-2">
