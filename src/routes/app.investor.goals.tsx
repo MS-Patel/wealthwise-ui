@@ -116,7 +116,7 @@ function GoalsPage() {
 
             <Tabs value={filter} onValueChange={(v) => setFilter(v as FilterKey)}>
               <TabsList>
-                <TabsTrigger value="all">All ({data.goals.length})</TabsTrigger>
+                <TabsTrigger value="all">All ({allGoals.length})</TabsTrigger>
                 <TabsTrigger value="on_track">On track</TabsTrigger>
                 <TabsTrigger value="at_risk">At risk</TabsTrigger>
                 <TabsTrigger value="behind">Behind</TabsTrigger>
@@ -137,6 +137,12 @@ function GoalsPage() {
           </>
         )}
       </div>
+
+      <GoalWizardDialog
+        open={wizardOpen}
+        onOpenChange={setWizardOpen}
+        onCreate={(goal) => setExtraGoals((prev) => [goal, ...prev])}
+      />
     </>
   );
 }
