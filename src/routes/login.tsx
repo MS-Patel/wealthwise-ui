@@ -10,13 +10,6 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
 import { Badge } from "@/components/ui/badge";
 import { BrandLogo } from "@/components/brand/brand-logo";
 
@@ -29,12 +22,10 @@ import {
 import {
   loginSchema,
   otpVerifySchema,
-  ROLE_OPTIONS,
   type LoginFormValues,
   type OtpVerifyFormValues,
 } from "@/features/auth/schemas";
 import { ROLE_HOME } from "@/features/auth/role-routes";
-import type { UserRole } from "@/types/auth";
 
 const searchSchema = z.object({
   redirect: z.string().optional().catch(undefined),
@@ -55,9 +46,9 @@ function LoginPage() {
   const navigate = useNavigate();
   const setSession = useAuthStore((s) => s.setSession);
 
-  const handleSuccess = (role: UserRole) => {
+  const handleSuccess = () => {
     toast.success("Welcome back");
-    navigate({ to: ROLE_HOME[role] });
+    navigate({ to: ROLE_HOME.investor });
   };
 
   return (
@@ -75,7 +66,7 @@ function LoginPage() {
               </Badge>
               <h1 className="text-3xl font-bold tracking-tight">Welcome back</h1>
               <p className="mt-2 text-sm text-muted-foreground">
-                Sign in to manage portfolios, clients, and operations.
+                Sign in to manage your portfolio, SIPs, and goals.
               </p>
             </div>
 
@@ -132,11 +123,11 @@ function BrandPanel() {
             Wealth platform
           </p>
           <h2 className="mt-3 text-4xl font-bold leading-tight tracking-tight">
-            One platform for the entire mutual-fund value chain.
+            Smart investing, designed for you.
           </h2>
           <p className="mt-4 text-base text-sidebar-foreground/70">
-            Real-time NAVs, BSE Star MF order routing, automated reconciliation, and
-            commission engines — built for investors, RMs, distributors, and ops teams.
+            Direct mutual funds with zero commission, goal-based planning, and tax-loss
+            harvesting — backed by SEBI-registered Navinchandra Securities (ARN 147231).
           </p>
         </div>
       </div>
@@ -172,7 +163,7 @@ function FeatureChip({
 /* ─── Password form ─────────────────────────────────────────────────── */
 
 interface FormProps {
-  onSuccess: (role: UserRole) => void;
+  onSuccess: () => void;
   setSession: ReturnType<typeof useAuthStore.getState>["setSession"];
 }
 
@@ -182,14 +173,14 @@ function PasswordForm({ onSuccess, setSession }: FormProps) {
 
   const form = useForm<LoginFormValues>({
     resolver: zodResolver(loginSchema),
-    defaultValues: { email: "investor@buybestfin.dev", password: "demo1234", role: "investor" },
+    defaultValues: { email: "investor@buybestfin.dev", password: "demo1234" },
   });
 
   const onSubmit = form.handleSubmit(async (values) => {
     try {
       const result = await login.mutateAsync(values);
       setSession(result);
-      onSuccess(result.user.role);
+      onSuccess();
     } catch (e) {
       toast.error(e instanceof Error ? e.message : "Sign in failed");
     }
@@ -197,18 +188,13 @@ function PasswordForm({ onSuccess, setSession }: FormProps) {
 
   return (
     <form onSubmit={onSubmit} className="space-y-5">
-      <RoleSelect
-        value={form.watch("role")}
-        onChange={(v) => form.setValue("role", v, { shouldValidate: true })}
-      />
-
       <div className="space-y-1.5">
         <Label htmlFor="email">Email</Label>
         <Input
           id="email"
           type="email"
           autoComplete="email"
-          placeholder="you@company.com"
+          placeholder="you@example.com"
           {...form.register("email")}
         />
         {form.formState.errors.email && (
@@ -270,7 +256,7 @@ function OtpForm({ onSuccess, setSession }: FormProps) {
 
   const form = useForm<OtpVerifyFormValues>({
     resolver: zodResolver(otpVerifySchema),
-    defaultValues: { identifier: "", otp: "", role: "investor" },
+    defaultValues: { identifier: "", otp: "" },
   });
 
   const handleRequest = async () => {
@@ -292,7 +278,7 @@ function OtpForm({ onSuccess, setSession }: FormProps) {
     try {
       const result = await verifyOtp.mutateAsync(values);
       setSession(result);
-      onSuccess(result.user.role);
+      onSuccess();
     } catch (e) {
       toast.error(e instanceof Error ? e.message : "Verification failed");
     }
@@ -300,16 +286,11 @@ function OtpForm({ onSuccess, setSession }: FormProps) {
 
   return (
     <form onSubmit={onSubmit} className="space-y-5">
-      <RoleSelect
-        value={form.watch("role")}
-        onChange={(v) => form.setValue("role", v, { shouldValidate: true })}
-      />
-
       <div className="space-y-1.5">
         <Label htmlFor="identifier">Email or mobile</Label>
         <Input
           id="identifier"
-          placeholder="you@company.com or +91…"
+          placeholder="you@example.com or +91…"
           {...form.register("identifier")}
         />
         {form.formState.errors.identifier && (
@@ -352,30 +333,5 @@ function OtpForm({ onSuccess, setSession }: FormProps) {
         </Button>
       )}
     </form>
-  );
-}
-
-/* ─── Role select ───────────────────────────────────────────────────── */
-
-function RoleSelect({ value, onChange }: { value: UserRole; onChange: (v: UserRole) => void }) {
-  return (
-    <div className="space-y-1.5">
-      <Label>Sign in as</Label>
-      <Select value={value} onValueChange={(v) => onChange(v as UserRole)}>
-        <SelectTrigger className="h-11">
-          <SelectValue />
-        </SelectTrigger>
-        <SelectContent>
-          {ROLE_OPTIONS.map((opt) => (
-            <SelectItem key={opt.value} value={opt.value}>
-              <div className="flex flex-col">
-                <span className="font-medium">{opt.label}</span>
-                <span className="text-xs text-muted-foreground">{opt.description}</span>
-              </div>
-            </SelectItem>
-          ))}
-        </SelectContent>
-      </Select>
-    </div>
   );
 }

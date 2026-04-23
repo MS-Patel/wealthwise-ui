@@ -1,4 +1,4 @@
-export type UserRole = "investor" | "admin" | "rm" | "distributor";
+export type UserRole = "investor";
 
 export interface User {
   id: string;
@@ -14,13 +14,11 @@ export interface User {
 export interface LoginCredentials {
   email: string;
   password: string;
-  role: UserRole;
 }
 
 export interface OtpLoginPayload {
   identifier: string;
   otp: string;
-  role: UserRole;
 }
 
 export interface ForgotPasswordPayload {

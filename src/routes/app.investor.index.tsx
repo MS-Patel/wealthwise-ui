@@ -9,29 +9,20 @@ import { AllocationDonut } from "@/features/portfolio/components/allocation-donu
 import { PerformanceChart } from "@/features/portfolio/components/performance-chart";
 import { usePortfolioOverviewQuery } from "@/features/portfolio/api";
 import { useAuthStore } from "@/stores/auth-store";
-import { useImpersonationStore } from "@/features/impersonation/store";
-import { ROLE_HOME } from "@/features/auth/role-routes";
 import { formatCompactINR, formatINR, formatPercent } from "@/lib/format";
 import { cn } from "@/lib/utils";
 import type { PortfolioSummary } from "@/types/portfolio";
 
 export const Route = createFileRoute("/app/investor/")({
-  beforeLoad: () => {
-    const { user } = useAuthStore.getState();
-    const impersonating = useImpersonationStore.getState().client;
-    // Allow RM/Distributor through when impersonating an investor
-    if (user && user.role !== "investor" && !impersonating) throw redirect({ to: ROLE_HOME[user.role] });
-  },
   head: () => ({ meta: [{ title: "Investor dashboard — BuyBestFin" }] }),
   component: InvestorDashboard,
 });
 
 function InvestorDashboard() {
   const user = useAuthStore((s) => s.user);
-  const impersonating = useImpersonationStore((s) => s.client);
   const { data, isLoading } = usePortfolioOverviewQuery();
-  const displayName = impersonating?.fullName ?? user?.fullName ?? "Investor";
-  const readOnly = !!impersonating;
+  const displayName = user?.fullName ?? "Investor";
+  const readOnly = false;
 
   return (
     <>
