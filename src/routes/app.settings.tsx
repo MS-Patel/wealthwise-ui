@@ -117,22 +117,6 @@ function SettingsPage() {
             </Card>
           </TabsContent>
 
-            <Card className="shadow-card">
-              <CardHeader>
-                <CardTitle>Two-factor authentication</CardTitle>
-                <CardDescription>Add a second layer of security to your account.</CardDescription>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                <ToggleRow
-                  title="Authenticator app"
-                  description="Time-based codes via Google Authenticator or Authy."
-                />
-                <Separator />
-                <ToggleRow title="SMS OTP" description="Receive codes on your registered mobile." defaultChecked />
-              </CardContent>
-            </Card>
-          </TabsContent>
-
           <TabsContent value="preferences" className="space-y-6">
             <Card className="shadow-card">
               <CardHeader>
