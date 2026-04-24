@@ -12,6 +12,7 @@ import {
   Settings,
   Compass,
   TrendingUp,
+  Repeat,
   type LucideIcon,
 } from "lucide-react";
 import type { UserRole } from "@/types/auth";
@@ -43,6 +44,7 @@ const investorNav: NavSection[] = [
       { label: "Explore Schemes", to: "/app/investor/explore", icon: Compass },
       { label: "Lumpsum", to: "/app/investor/orders/lumpsum", icon: TrendingUp },
       { label: "SIP", to: "/app/investor/orders/sip", icon: Wallet },
+      { label: "My SIPs", to: "/app/investor/sips", icon: Repeat },
       { label: "Redeem", to: "/app/investor/orders/redeem", icon: Wallet },
       { label: "Switch", to: "/app/investor/orders/switch", icon: Repeat2 },
     ],
