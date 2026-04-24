@@ -117,6 +117,16 @@ function HoldingDetailPage() {
                   <Compass className="h-4 w-4" /> View scheme page
                 </Link>
               </Button>
+              {HOLDING_TO_FOLIO[holding.id] && (
+                <Button asChild variant="ghost" className="gap-2">
+                  <Link
+                    to="/app/investor/folios/$folioNumber"
+                    params={{ folioNumber: HOLDING_TO_FOLIO[holding.id]! }}
+                  >
+                    <FolderOpen className="h-4 w-4" /> View folio
+                  </Link>
+                </Button>
+              )}
               <Button asChild variant="outline" className="gap-2">
                 <Link to="/app/investor/orders/redeem" search={{ holdingId: holding.id }}>
                   <ArrowDownToLine className="h-4 w-4" /> Redeem
