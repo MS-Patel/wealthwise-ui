@@ -24,3 +24,13 @@ export interface OtpLoginPayload {
 export interface ForgotPasswordPayload {
   email: string;
 }
+
+export interface PasswordChangePayload {
+  currentPassword: string;
+  newPassword: string;
+}
+
+export interface PasswordResetPayload {
+  token: string;
+  newPassword: string;
+}

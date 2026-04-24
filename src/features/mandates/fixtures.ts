@@ -1,0 +1,45 @@
+import type { Mandate } from "@/types/mandate";
+
+export const MANDATES_FIXTURE: Mandate[] = [
+  {
+    id: "mand_001",
+    bankAccountId: "ba_hdfc_primary",
+    bankName: "HDFC Bank",
+    accountMasked: "XXXXXX7842",
+    amountLimit: 100000,
+    status: "active",
+    createdAt: "2024-05-12T08:30:00Z",
+    approvedAt: "2024-05-14T11:02:00Z",
+    umrn: "HDFC0000123456789012",
+  },
+  {
+    id: "mand_002",
+    bankAccountId: "ba_icici",
+    bankName: "ICICI Bank",
+    accountMasked: "XXXXXX2199",
+    amountLimit: 50000,
+    status: "active",
+    createdAt: "2025-01-22T10:14:00Z",
+    approvedAt: "2025-01-24T09:48:00Z",
+    umrn: "ICIC0000987654321098",
+  },
+  {
+    id: "mand_003",
+    bankAccountId: "ba_icici",
+    bankName: "ICICI Bank",
+    accountMasked: "XXXXXX2199",
+    amountLimit: 25000,
+    status: "rejected",
+    createdAt: "2026-03-01T07:45:00Z",
+    failureReason: "Signature mismatch with bank records.",
+  },
+  {
+    id: "mand_004",
+    bankAccountId: "ba_hdfc_primary",
+    bankName: "HDFC Bank",
+    accountMasked: "XXXXXX7842",
+    amountLimit: 200000,
+    status: "pending",
+    createdAt: "2026-04-18T13:21:00Z",
+  },
+];

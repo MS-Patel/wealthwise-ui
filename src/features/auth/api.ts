@@ -6,6 +6,8 @@ import type {
   ForgotPasswordPayload,
   LoginCredentials,
   OtpLoginPayload,
+  PasswordChangePayload,
+  PasswordResetPayload,
   User,
 } from "@/types/auth";
 
@@ -108,6 +110,29 @@ export const authApi = {
     }
     await api.post("/auth/logout/");
   },
+
+  async changePassword(payload: PasswordChangePayload): Promise<{ ok: true }> {
+    if (env.USE_MOCK_API) {
+      await wait(700);
+      // Mock: accept "password123" as the current password.
+      if (payload.currentPassword !== "password123") {
+        throw Object.assign(new Error("Current password is incorrect"), { status: 400 });
+      }
+      return { ok: true };
+    }
+    return api.post("/auth/password/change/", payload);
+  },
+
+  async resetPassword(payload: PasswordResetPayload): Promise<{ ok: true }> {
+    if (env.USE_MOCK_API) {
+      await wait(700);
+      if (!payload.token) {
+        throw Object.assign(new Error("Invalid or expired reset token"), { status: 400 });
+      }
+      return { ok: true };
+    }
+    return api.post("/auth/password/reset/confirm/", payload);
+  },
 };
 
 /* ─── React Query hooks ─────────────────────────────────────────────── */
@@ -134,4 +159,12 @@ export function useForgotPasswordMutation() {
 
 export function useLogoutMutation() {
   return useMutation({ mutationFn: () => authApi.logout() });
+}
+
+export function useChangePasswordMutation() {
+  return useMutation({ mutationFn: (p: PasswordChangePayload) => authApi.changePassword(p) });
+}
+
+export function useResetPasswordMutation() {
+  return useMutation({ mutationFn: (p: PasswordResetPayload) => authApi.resetPassword(p) });
 }

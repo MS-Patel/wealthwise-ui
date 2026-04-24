@@ -1,5 +1,7 @@
 import { createFileRoute, redirect } from "@tanstack/react-router";
-import { Lock, Palette, ShieldCheck, User as UserIcon } from "lucide-react";
+import { Lock, Palette, ShieldCheck, User as UserIcon, Loader2 } from "lucide-react";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -12,6 +14,8 @@ import { PageHeader } from "@/components/layout/page-header";
 import { useAuthStore } from "@/stores/auth-store";
 import { useUiStore } from "@/stores/ui-store";
 import { ROLE_LABEL } from "@/features/auth/role-routes";
+import { useChangePasswordMutation } from "@/features/auth/api";
+import { passwordChangeSchema, type PasswordChangeFormValues } from "@/features/auth/schemas";
 import { toast } from "sonner";
 
 export const Route = createFileRoute("/app/settings")({
@@ -95,22 +99,7 @@ function SettingsPage() {
           </TabsContent>
 
           <TabsContent value="security" className="space-y-6">
-            <Card className="shadow-card">
-              <CardHeader>
-                <CardTitle>Password</CardTitle>
-                <CardDescription>Use a strong, unique password.</CardDescription>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                <Field label="Current password" type="password" placeholder="••••••••" />
-                <div className="grid gap-4 sm:grid-cols-2">
-                  <Field label="New password" type="password" placeholder="At least 8 characters" />
-                  <Field label="Confirm password" type="password" />
-                </div>
-                <div className="flex justify-end">
-                  <Button onClick={() => toast.success("Password updated")}>Update password</Button>
-                </div>
-              </CardContent>
-            </Card>
+            <ChangePasswordCard />
 
             <Card className="shadow-card">
               <CardHeader>
@@ -205,5 +194,70 @@ function Stat({ label, value, tone }: { label: string; value: string; tone?: "su
         {value}
       </p>
     </div>
+  );
+}
+
+function ChangePasswordCard() {
+  const mutation = useChangePasswordMutation();
+  const form = useForm<PasswordChangeFormValues>({
+    resolver: zodResolver(passwordChangeSchema),
+    defaultValues: { currentPassword: "", newPassword: "", confirmPassword: "" },
+  });
+
+  const onSubmit = form.handleSubmit(async (values) => {
+    try {
+      await mutation.mutateAsync({
+        currentPassword: values.currentPassword,
+        newPassword: values.newPassword,
+      });
+      toast.success("Password updated");
+      form.reset();
+    } catch (err) {
+      toast.error(err instanceof Error ? err.message : "Could not update password");
+    }
+  });
+
+  return (
+    <Card className="shadow-card">
+      <CardHeader>
+        <CardTitle>Password</CardTitle>
+        <CardDescription>
+          Use a strong, unique password. Mock current password: <code className="font-mono text-xs">password123</code>
+        </CardDescription>
+      </CardHeader>
+      <CardContent>
+        <form onSubmit={onSubmit} className="space-y-4">
+          <div className="space-y-1.5">
+            <Label htmlFor="current">Current password</Label>
+            <Input id="current" type="password" placeholder="••••••••" {...form.register("currentPassword")} />
+            {form.formState.errors.currentPassword && (
+              <p className="text-xs text-destructive">{form.formState.errors.currentPassword.message}</p>
+            )}
+          </div>
+          <div className="grid gap-4 sm:grid-cols-2">
+            <div className="space-y-1.5">
+              <Label htmlFor="new">New password</Label>
+              <Input id="new" type="password" placeholder="At least 8 characters" {...form.register("newPassword")} />
+              {form.formState.errors.newPassword && (
+                <p className="text-xs text-destructive">{form.formState.errors.newPassword.message}</p>
+              )}
+            </div>
+            <div className="space-y-1.5">
+              <Label htmlFor="confirm">Confirm password</Label>
+              <Input id="confirm" type="password" {...form.register("confirmPassword")} />
+              {form.formState.errors.confirmPassword && (
+                <p className="text-xs text-destructive">{form.formState.errors.confirmPassword.message}</p>
+              )}
+            </div>
+          </div>
+          <div className="flex justify-end">
+            <Button type="submit" disabled={mutation.isPending} className="gap-2">
+              {mutation.isPending && <Loader2 className="h-4 w-4 animate-spin" />}
+              Update password
+            </Button>
+          </div>
+        </form>
+      </CardContent>
+    </Card>
   );
 }

@@ -10,6 +10,7 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as SignupRouteImport } from './routes/signup'
+import { Route as ResetPasswordRouteImport } from './routes/reset-password'
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as ForgotPasswordRouteImport } from './routes/forgot-password'
 import { Route as AppRouteImport } from './routes/app'
@@ -19,6 +20,7 @@ import { Route as AppNotificationsRouteImport } from './routes/app.notifications
 import { Route as AppInvestorIndexRouteImport } from './routes/app.investor.index'
 import { Route as AppInvestorTransactionsRouteImport } from './routes/app.investor.transactions'
 import { Route as AppInvestorTaxRouteImport } from './routes/app.investor.tax'
+import { Route as AppInvestorSipsRouteImport } from './routes/app.investor.sips'
 import { Route as AppInvestorProfileRouteImport } from './routes/app.investor.profile'
 import { Route as AppInvestorPortfolioRouteImport } from './routes/app.investor.portfolio'
 import { Route as AppInvestorInsightsRouteImport } from './routes/app.investor.insights'
@@ -29,11 +31,17 @@ import { Route as AppInvestorOrdersSwitchRouteImport } from './routes/app.invest
 import { Route as AppInvestorOrdersSipRouteImport } from './routes/app.investor.orders.sip'
 import { Route as AppInvestorOrdersRedeemRouteImport } from './routes/app.investor.orders.redeem'
 import { Route as AppInvestorOrdersLumpsumRouteImport } from './routes/app.investor.orders.lumpsum'
+import { Route as AppInvestorFoliosFolioNumberRouteImport } from './routes/app.investor.folios.$folioNumber'
 import { Route as AppInvestorExploreSchemeIdRouteImport } from './routes/app.investor.explore.$schemeId'
 
 const SignupRoute = SignupRouteImport.update({
   id: '/signup',
   path: '/signup',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ResetPasswordRoute = ResetPasswordRouteImport.update({
+  id: '/reset-password',
+  path: '/reset-password',
   getParentRoute: () => rootRouteImport,
 } as any)
 const LoginRoute = LoginRouteImport.update({
@@ -79,6 +87,11 @@ const AppInvestorTransactionsRoute = AppInvestorTransactionsRouteImport.update({
 const AppInvestorTaxRoute = AppInvestorTaxRouteImport.update({
   id: '/investor/tax',
   path: '/investor/tax',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppInvestorSipsRoute = AppInvestorSipsRouteImport.update({
+  id: '/investor/sips',
+  path: '/investor/sips',
   getParentRoute: () => AppRoute,
 } as any)
 const AppInvestorProfileRoute = AppInvestorProfileRouteImport.update({
@@ -133,6 +146,12 @@ const AppInvestorOrdersLumpsumRoute =
     path: '/investor/orders/lumpsum',
     getParentRoute: () => AppRoute,
   } as any)
+const AppInvestorFoliosFolioNumberRoute =
+  AppInvestorFoliosFolioNumberRouteImport.update({
+    id: '/investor/folios/$folioNumber',
+    path: '/investor/folios/$folioNumber',
+    getParentRoute: () => AppRoute,
+  } as any)
 const AppInvestorExploreSchemeIdRoute =
   AppInvestorExploreSchemeIdRouteImport.update({
     id: '/$schemeId',
@@ -145,6 +164,7 @@ export interface FileRoutesByFullPath {
   '/app': typeof AppRouteWithChildren
   '/forgot-password': typeof ForgotPasswordRoute
   '/login': typeof LoginRoute
+  '/reset-password': typeof ResetPasswordRoute
   '/signup': typeof SignupRoute
   '/app/notifications': typeof AppNotificationsRoute
   '/app/settings': typeof AppSettingsRoute
@@ -153,10 +173,12 @@ export interface FileRoutesByFullPath {
   '/app/investor/insights': typeof AppInvestorInsightsRoute
   '/app/investor/portfolio': typeof AppInvestorPortfolioRouteWithChildren
   '/app/investor/profile': typeof AppInvestorProfileRoute
+  '/app/investor/sips': typeof AppInvestorSipsRoute
   '/app/investor/tax': typeof AppInvestorTaxRoute
   '/app/investor/transactions': typeof AppInvestorTransactionsRoute
   '/app/investor/': typeof AppInvestorIndexRoute
   '/app/investor/explore/$schemeId': typeof AppInvestorExploreSchemeIdRoute
+  '/app/investor/folios/$folioNumber': typeof AppInvestorFoliosFolioNumberRoute
   '/app/investor/orders/lumpsum': typeof AppInvestorOrdersLumpsumRoute
   '/app/investor/orders/redeem': typeof AppInvestorOrdersRedeemRoute
   '/app/investor/orders/sip': typeof AppInvestorOrdersSipRoute
@@ -168,6 +190,7 @@ export interface FileRoutesByTo {
   '/app': typeof AppRouteWithChildren
   '/forgot-password': typeof ForgotPasswordRoute
   '/login': typeof LoginRoute
+  '/reset-password': typeof ResetPasswordRoute
   '/signup': typeof SignupRoute
   '/app/notifications': typeof AppNotificationsRoute
   '/app/settings': typeof AppSettingsRoute
@@ -176,10 +199,12 @@ export interface FileRoutesByTo {
   '/app/investor/insights': typeof AppInvestorInsightsRoute
   '/app/investor/portfolio': typeof AppInvestorPortfolioRouteWithChildren
   '/app/investor/profile': typeof AppInvestorProfileRoute
+  '/app/investor/sips': typeof AppInvestorSipsRoute
   '/app/investor/tax': typeof AppInvestorTaxRoute
   '/app/investor/transactions': typeof AppInvestorTransactionsRoute
   '/app/investor': typeof AppInvestorIndexRoute
   '/app/investor/explore/$schemeId': typeof AppInvestorExploreSchemeIdRoute
+  '/app/investor/folios/$folioNumber': typeof AppInvestorFoliosFolioNumberRoute
   '/app/investor/orders/lumpsum': typeof AppInvestorOrdersLumpsumRoute
   '/app/investor/orders/redeem': typeof AppInvestorOrdersRedeemRoute
   '/app/investor/orders/sip': typeof AppInvestorOrdersSipRoute
@@ -192,6 +217,7 @@ export interface FileRoutesById {
   '/app': typeof AppRouteWithChildren
   '/forgot-password': typeof ForgotPasswordRoute
   '/login': typeof LoginRoute
+  '/reset-password': typeof ResetPasswordRoute
   '/signup': typeof SignupRoute
   '/app/notifications': typeof AppNotificationsRoute
   '/app/settings': typeof AppSettingsRoute
@@ -200,10 +226,12 @@ export interface FileRoutesById {
   '/app/investor/insights': typeof AppInvestorInsightsRoute
   '/app/investor/portfolio': typeof AppInvestorPortfolioRouteWithChildren
   '/app/investor/profile': typeof AppInvestorProfileRoute
+  '/app/investor/sips': typeof AppInvestorSipsRoute
   '/app/investor/tax': typeof AppInvestorTaxRoute
   '/app/investor/transactions': typeof AppInvestorTransactionsRoute
   '/app/investor/': typeof AppInvestorIndexRoute
   '/app/investor/explore/$schemeId': typeof AppInvestorExploreSchemeIdRoute
+  '/app/investor/folios/$folioNumber': typeof AppInvestorFoliosFolioNumberRoute
   '/app/investor/orders/lumpsum': typeof AppInvestorOrdersLumpsumRoute
   '/app/investor/orders/redeem': typeof AppInvestorOrdersRedeemRoute
   '/app/investor/orders/sip': typeof AppInvestorOrdersSipRoute
@@ -217,6 +245,7 @@ export interface FileRouteTypes {
     | '/app'
     | '/forgot-password'
     | '/login'
+    | '/reset-password'
     | '/signup'
     | '/app/notifications'
     | '/app/settings'
@@ -225,10 +254,12 @@ export interface FileRouteTypes {
     | '/app/investor/insights'
     | '/app/investor/portfolio'
     | '/app/investor/profile'
+    | '/app/investor/sips'
     | '/app/investor/tax'
     | '/app/investor/transactions'
     | '/app/investor/'
     | '/app/investor/explore/$schemeId'
+    | '/app/investor/folios/$folioNumber'
     | '/app/investor/orders/lumpsum'
     | '/app/investor/orders/redeem'
     | '/app/investor/orders/sip'
@@ -240,6 +271,7 @@ export interface FileRouteTypes {
     | '/app'
     | '/forgot-password'
     | '/login'
+    | '/reset-password'
     | '/signup'
     | '/app/notifications'
     | '/app/settings'
@@ -248,10 +280,12 @@ export interface FileRouteTypes {
     | '/app/investor/insights'
     | '/app/investor/portfolio'
     | '/app/investor/profile'
+    | '/app/investor/sips'
     | '/app/investor/tax'
     | '/app/investor/transactions'
     | '/app/investor'
     | '/app/investor/explore/$schemeId'
+    | '/app/investor/folios/$folioNumber'
     | '/app/investor/orders/lumpsum'
     | '/app/investor/orders/redeem'
     | '/app/investor/orders/sip'
@@ -263,6 +297,7 @@ export interface FileRouteTypes {
     | '/app'
     | '/forgot-password'
     | '/login'
+    | '/reset-password'
     | '/signup'
     | '/app/notifications'
     | '/app/settings'
@@ -271,10 +306,12 @@ export interface FileRouteTypes {
     | '/app/investor/insights'
     | '/app/investor/portfolio'
     | '/app/investor/profile'
+    | '/app/investor/sips'
     | '/app/investor/tax'
     | '/app/investor/transactions'
     | '/app/investor/'
     | '/app/investor/explore/$schemeId'
+    | '/app/investor/folios/$folioNumber'
     | '/app/investor/orders/lumpsum'
     | '/app/investor/orders/redeem'
     | '/app/investor/orders/sip'
@@ -287,6 +324,7 @@ export interface RootRouteChildren {
   AppRoute: typeof AppRouteWithChildren
   ForgotPasswordRoute: typeof ForgotPasswordRoute
   LoginRoute: typeof LoginRoute
+  ResetPasswordRoute: typeof ResetPasswordRoute
   SignupRoute: typeof SignupRoute
 }
 
@@ -297,6 +335,13 @@ declare module '@tanstack/react-router' {
       path: '/signup'
       fullPath: '/signup'
       preLoaderRoute: typeof SignupRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/reset-password': {
+      id: '/reset-password'
+      path: '/reset-password'
+      fullPath: '/reset-password'
+      preLoaderRoute: typeof ResetPasswordRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/login': {
@@ -360,6 +405,13 @@ declare module '@tanstack/react-router' {
       path: '/investor/tax'
       fullPath: '/app/investor/tax'
       preLoaderRoute: typeof AppInvestorTaxRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/app/investor/sips': {
+      id: '/app/investor/sips'
+      path: '/investor/sips'
+      fullPath: '/app/investor/sips'
+      preLoaderRoute: typeof AppInvestorSipsRouteImport
       parentRoute: typeof AppRoute
     }
     '/app/investor/profile': {
@@ -432,6 +484,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppInvestorOrdersLumpsumRouteImport
       parentRoute: typeof AppRoute
     }
+    '/app/investor/folios/$folioNumber': {
+      id: '/app/investor/folios/$folioNumber'
+      path: '/investor/folios/$folioNumber'
+      fullPath: '/app/investor/folios/$folioNumber'
+      preLoaderRoute: typeof AppInvestorFoliosFolioNumberRouteImport
+      parentRoute: typeof AppRoute
+    }
     '/app/investor/explore/$schemeId': {
       id: '/app/investor/explore/$schemeId'
       path: '/$schemeId'
@@ -472,9 +531,11 @@ interface AppRouteChildren {
   AppInvestorInsightsRoute: typeof AppInvestorInsightsRoute
   AppInvestorPortfolioRoute: typeof AppInvestorPortfolioRouteWithChildren
   AppInvestorProfileRoute: typeof AppInvestorProfileRoute
+  AppInvestorSipsRoute: typeof AppInvestorSipsRoute
   AppInvestorTaxRoute: typeof AppInvestorTaxRoute
   AppInvestorTransactionsRoute: typeof AppInvestorTransactionsRoute
   AppInvestorIndexRoute: typeof AppInvestorIndexRoute
+  AppInvestorFoliosFolioNumberRoute: typeof AppInvestorFoliosFolioNumberRoute
   AppInvestorOrdersLumpsumRoute: typeof AppInvestorOrdersLumpsumRoute
   AppInvestorOrdersRedeemRoute: typeof AppInvestorOrdersRedeemRoute
   AppInvestorOrdersSipRoute: typeof AppInvestorOrdersSipRoute
@@ -489,9 +550,11 @@ const AppRouteChildren: AppRouteChildren = {
   AppInvestorInsightsRoute: AppInvestorInsightsRoute,
   AppInvestorPortfolioRoute: AppInvestorPortfolioRouteWithChildren,
   AppInvestorProfileRoute: AppInvestorProfileRoute,
+  AppInvestorSipsRoute: AppInvestorSipsRoute,
   AppInvestorTaxRoute: AppInvestorTaxRoute,
   AppInvestorTransactionsRoute: AppInvestorTransactionsRoute,
   AppInvestorIndexRoute: AppInvestorIndexRoute,
+  AppInvestorFoliosFolioNumberRoute: AppInvestorFoliosFolioNumberRoute,
   AppInvestorOrdersLumpsumRoute: AppInvestorOrdersLumpsumRoute,
   AppInvestorOrdersRedeemRoute: AppInvestorOrdersRedeemRoute,
   AppInvestorOrdersSipRoute: AppInvestorOrdersSipRoute,
@@ -505,6 +568,7 @@ const rootRouteChildren: RootRouteChildren = {
   AppRoute: AppRouteWithChildren,
   ForgotPasswordRoute: ForgotPasswordRoute,
   LoginRoute: LoginRoute,
+  ResetPasswordRoute: ResetPasswordRoute,
   SignupRoute: SignupRoute,
 }
 export const routeTree = rootRouteImport

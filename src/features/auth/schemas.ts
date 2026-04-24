@@ -40,3 +40,32 @@ export type OtpRequestFormValues = z.infer<typeof otpRequestSchema>;
 export type OtpVerifyFormValues = z.infer<typeof otpVerifySchema>;
 export type ForgotPasswordFormValues = z.infer<typeof forgotPasswordSchema>;
 export type SignupFormValues = z.infer<typeof signupSchema>;
+
+export const passwordChangeSchema = z
+  .object({
+    currentPassword: z.string().min(1, "Enter your current password"),
+    newPassword: z.string().min(8, "Use at least 8 characters"),
+    confirmPassword: z.string(),
+  })
+  .refine((data) => data.newPassword === data.confirmPassword, {
+    message: "Passwords don't match",
+    path: ["confirmPassword"],
+  })
+  .refine((data) => data.currentPassword !== data.newPassword, {
+    message: "New password must differ from current",
+    path: ["newPassword"],
+  });
+
+export const passwordResetSchema = z
+  .object({
+    token: z.string().min(1, "Reset token missing"),
+    newPassword: z.string().min(8, "Use at least 8 characters"),
+    confirmPassword: z.string(),
+  })
+  .refine((data) => data.newPassword === data.confirmPassword, {
+    message: "Passwords don't match",
+    path: ["confirmPassword"],
+  });
+
+export type PasswordChangeFormValues = z.infer<typeof passwordChangeSchema>;
+export type PasswordResetFormValues = z.infer<typeof passwordResetSchema>;

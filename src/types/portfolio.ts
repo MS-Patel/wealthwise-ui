@@ -72,3 +72,36 @@ export interface PortfolioOverview {
   performance: PerformancePoint[];
   topHoldings: Holding[];
 }
+
+export interface FolioRecentTxn {
+  id: string;
+  date: string; // ISO
+  type: "purchase" | "sip" | "redeem" | "switch_in" | "switch_out" | "dividend";
+  amount: number;
+  units: number;
+  nav: number;
+  status: "completed" | "pending" | "processing" | "failed";
+}
+
+export interface FolioDetail {
+  folioNumber: string;
+  amc: string;
+  registrar: "CAMS" | "KFintech";
+  openedOn: string; // ISO
+  holdings: Holding[];
+  totalInvested: number;
+  totalCurrentValue: number;
+  totalUnrealizedGain: number;
+  totalReturnPct: number;
+  recentTransactions: FolioRecentTxn[];
+  linkedSipIds: string[];
+  linkedBankAccountId: string;
+  nominees: Array<{ name: string; relation: string; sharePct: number }>;
+}
+
+export interface FolioSummary {
+  folioNumber: string;
+  amc: string;
+  schemes: number;
+  currentValue: number;
+}

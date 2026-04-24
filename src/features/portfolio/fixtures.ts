@@ -1,5 +1,8 @@
 import type {
   AllocationSlice,
+  FolioDetail,
+  FolioRecentTxn,
+  FolioSummary,
   Holding,
   PerformancePoint,
   PortfolioOverview,
@@ -240,3 +243,117 @@ export const PORTFOLIO_FIXTURE: PortfolioOverview = {
 };
 
 export const HOLDINGS_FIXTURE: Holding[] = HOLDINGS;
+
+/* ─── Folio synthesis (groups holdings by AMC) ───────────────────── */
+
+const AMC_TO_FOLIO: Record<string, { folio: string; registrar: "CAMS" | "KFintech"; openedOn: string }> = {
+  PPFAS: { folio: "PP-91823412", registrar: "CAMS", openedOn: "2023-04-12" },
+  "Axis MF": { folio: "AX-77124908", registrar: "KFintech", openedOn: "2023-09-02" },
+  "Mirae Asset": { folio: "MR-44128820", registrar: "CAMS", openedOn: "2024-02-18" },
+  "Quant MF": { folio: "QT-30219844", registrar: "KFintech", openedOn: "2024-08-30" },
+  "ICICI Pru": { folio: "IC-99008712", registrar: "CAMS", openedOn: "2022-11-10" },
+  "HDFC MF": { folio: "HD-66432110", registrar: "CAMS", openedOn: "2023-01-22" },
+  Nippon: { folio: "NP-22788001", registrar: "KFintech", openedOn: "2024-07-04" },
+  "Motilal Oswal": { folio: "MO-50912387", registrar: "KFintech", openedOn: "2024-04-15" },
+};
+
+const SIP_LINKS: Record<string, string[]> = {
+  "PP-91823412": ["sip_pp_flexi"],
+  "AX-77124908": ["sip_axis_blue"],
+  "QT-30219844": ["sip_quant_small"],
+  "MO-50912387": ["sip_mosl_nasdaq"],
+};
+
+function buildRecentTxns(holding: Holding, seedShift: number): FolioRecentTxn[] {
+  const seed = holding.id.split("").reduce((s, c) => s + c.charCodeAt(0), 0) + seedShift;
+  let r = seed;
+  const today = new Date("2026-04-16");
+  const types: FolioRecentTxn["type"][] = holding.sip
+    ? ["sip", "sip", "sip", "purchase"]
+    : ["purchase", "dividend", "purchase"];
+  return types.map((type, i) => {
+    r = (r * 9301 + 49297) % 233280;
+    const monthsBack = i + 1;
+    const date = new Date(today);
+    date.setMonth(today.getMonth() - monthsBack);
+    const amount =
+      type === "sip"
+        ? 5000 + (r % 11) * 1000
+        : type === "dividend"
+          ? 500 + (r % 8) * 250
+          : 25_000 + (r % 12) * 5_000;
+    const nav = holding.currentNav * (0.92 + (r % 100) / 1000);
+    return {
+      id: `${holding.id}_t${i}`,
+      date: date.toISOString(),
+      type,
+      amount,
+      units: +(amount / nav).toFixed(3),
+      nav: +nav.toFixed(2),
+      status: "completed",
+    };
+  });
+}
+
+function buildFolios(): Record<string, FolioDetail> {
+  const groups = new Map<string, Holding[]>();
+  for (const h of HOLDINGS) {
+    const arr = groups.get(h.amc) ?? [];
+    arr.push(h);
+    groups.set(h.amc, arr);
+  }
+
+  const out: Record<string, FolioDetail> = {};
+  for (const [amc, holdings] of groups) {
+    const meta = AMC_TO_FOLIO[amc] ?? {
+      folio: `XX-${Math.floor(10_000_000 + Math.random() * 89_999_999)}`,
+      registrar: "CAMS" as const,
+      openedOn: "2024-01-01",
+    };
+    const totalInvested = holdings.reduce((s, h) => s + h.invested, 0);
+    const totalCurrentValue = holdings.reduce((s, h) => s + h.currentValue, 0);
+    const totalUnrealizedGain = totalCurrentValue - totalInvested;
+    const recent = holdings
+      .flatMap((h, i) => buildRecentTxns(h, i))
+      .sort((a, b) => +new Date(b.date) - +new Date(a.date))
+      .slice(0, 10);
+    out[meta.folio] = {
+      folioNumber: meta.folio,
+      amc,
+      registrar: meta.registrar,
+      openedOn: meta.openedOn,
+      holdings,
+      totalInvested,
+      totalCurrentValue,
+      totalUnrealizedGain,
+      totalReturnPct: (totalUnrealizedGain / totalInvested) * 100,
+      recentTransactions: recent,
+      linkedSipIds: SIP_LINKS[meta.folio] ?? [],
+      linkedBankAccountId: "ba_hdfc_primary",
+      nominees: [
+        { name: "Saanvi Mehta", relation: "Spouse", sharePct: 60 },
+        { name: "Rohan Mehta", relation: "Father", sharePct: 40 },
+      ],
+    };
+  }
+  return out;
+}
+
+export const FOLIOS_FIXTURE: Record<string, FolioDetail> = buildFolios();
+
+export const FOLIOS_SUMMARY_FIXTURE: FolioSummary[] = Object.values(FOLIOS_FIXTURE).map((f) => ({
+  folioNumber: f.folioNumber,
+  amc: f.amc,
+  schemes: f.holdings.length,
+  currentValue: f.totalCurrentValue,
+}));
+
+/** Map a holding id → its folio number (for cross-linking in UI). */
+export const HOLDING_TO_FOLIO: Record<string, string> = (() => {
+  const map: Record<string, string> = {};
+  for (const folio of Object.values(FOLIOS_FIXTURE)) {
+    for (const h of folio.holdings) map[h.id] = folio.folioNumber;
+  }
+  return map;
+})();
+
