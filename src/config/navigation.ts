@@ -13,6 +13,7 @@ import {
   Compass,
   TrendingUp,
   Repeat,
+  FileBarChart,
   type LucideIcon,
 } from "lucide-react";
 import type { UserRole } from "@/types/auth";
@@ -54,6 +55,7 @@ const investorNav: NavSection[] = [
     items: [
       { label: "Goals", to: "/app/investor/goals", icon: Target },
       { label: "Tax Harvesting", to: "/app/investor/tax", icon: Calculator },
+      { label: "Reports", to: "/app/investor/reports", icon: FileBarChart },
       { label: "AI Insights", to: "/app/investor/insights", icon: Sparkles, badge: "Beta" },
     ],
   },

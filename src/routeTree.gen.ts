@@ -21,6 +21,7 @@ import { Route as AppInvestorIndexRouteImport } from './routes/app.investor.inde
 import { Route as AppInvestorTransactionsRouteImport } from './routes/app.investor.transactions'
 import { Route as AppInvestorTaxRouteImport } from './routes/app.investor.tax'
 import { Route as AppInvestorSipsRouteImport } from './routes/app.investor.sips'
+import { Route as AppInvestorReportsRouteImport } from './routes/app.investor.reports'
 import { Route as AppInvestorProfileRouteImport } from './routes/app.investor.profile'
 import { Route as AppInvestorPortfolioRouteImport } from './routes/app.investor.portfolio'
 import { Route as AppInvestorInsightsRouteImport } from './routes/app.investor.insights'
@@ -92,6 +93,11 @@ const AppInvestorTaxRoute = AppInvestorTaxRouteImport.update({
 const AppInvestorSipsRoute = AppInvestorSipsRouteImport.update({
   id: '/investor/sips',
   path: '/investor/sips',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppInvestorReportsRoute = AppInvestorReportsRouteImport.update({
+  id: '/investor/reports',
+  path: '/investor/reports',
   getParentRoute: () => AppRoute,
 } as any)
 const AppInvestorProfileRoute = AppInvestorProfileRouteImport.update({
@@ -173,6 +179,7 @@ export interface FileRoutesByFullPath {
   '/app/investor/insights': typeof AppInvestorInsightsRoute
   '/app/investor/portfolio': typeof AppInvestorPortfolioRouteWithChildren
   '/app/investor/profile': typeof AppInvestorProfileRoute
+  '/app/investor/reports': typeof AppInvestorReportsRoute
   '/app/investor/sips': typeof AppInvestorSipsRoute
   '/app/investor/tax': typeof AppInvestorTaxRoute
   '/app/investor/transactions': typeof AppInvestorTransactionsRoute
@@ -199,6 +206,7 @@ export interface FileRoutesByTo {
   '/app/investor/insights': typeof AppInvestorInsightsRoute
   '/app/investor/portfolio': typeof AppInvestorPortfolioRouteWithChildren
   '/app/investor/profile': typeof AppInvestorProfileRoute
+  '/app/investor/reports': typeof AppInvestorReportsRoute
   '/app/investor/sips': typeof AppInvestorSipsRoute
   '/app/investor/tax': typeof AppInvestorTaxRoute
   '/app/investor/transactions': typeof AppInvestorTransactionsRoute
@@ -226,6 +234,7 @@ export interface FileRoutesById {
   '/app/investor/insights': typeof AppInvestorInsightsRoute
   '/app/investor/portfolio': typeof AppInvestorPortfolioRouteWithChildren
   '/app/investor/profile': typeof AppInvestorProfileRoute
+  '/app/investor/reports': typeof AppInvestorReportsRoute
   '/app/investor/sips': typeof AppInvestorSipsRoute
   '/app/investor/tax': typeof AppInvestorTaxRoute
   '/app/investor/transactions': typeof AppInvestorTransactionsRoute
@@ -254,6 +263,7 @@ export interface FileRouteTypes {
     | '/app/investor/insights'
     | '/app/investor/portfolio'
     | '/app/investor/profile'
+    | '/app/investor/reports'
     | '/app/investor/sips'
     | '/app/investor/tax'
     | '/app/investor/transactions'
@@ -280,6 +290,7 @@ export interface FileRouteTypes {
     | '/app/investor/insights'
     | '/app/investor/portfolio'
     | '/app/investor/profile'
+    | '/app/investor/reports'
     | '/app/investor/sips'
     | '/app/investor/tax'
     | '/app/investor/transactions'
@@ -306,6 +317,7 @@ export interface FileRouteTypes {
     | '/app/investor/insights'
     | '/app/investor/portfolio'
     | '/app/investor/profile'
+    | '/app/investor/reports'
     | '/app/investor/sips'
     | '/app/investor/tax'
     | '/app/investor/transactions'
@@ -412,6 +424,13 @@ declare module '@tanstack/react-router' {
       path: '/investor/sips'
       fullPath: '/app/investor/sips'
       preLoaderRoute: typeof AppInvestorSipsRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/app/investor/reports': {
+      id: '/app/investor/reports'
+      path: '/investor/reports'
+      fullPath: '/app/investor/reports'
+      preLoaderRoute: typeof AppInvestorReportsRouteImport
       parentRoute: typeof AppRoute
     }
     '/app/investor/profile': {
@@ -531,6 +550,7 @@ interface AppRouteChildren {
   AppInvestorInsightsRoute: typeof AppInvestorInsightsRoute
   AppInvestorPortfolioRoute: typeof AppInvestorPortfolioRouteWithChildren
   AppInvestorProfileRoute: typeof AppInvestorProfileRoute
+  AppInvestorReportsRoute: typeof AppInvestorReportsRoute
   AppInvestorSipsRoute: typeof AppInvestorSipsRoute
   AppInvestorTaxRoute: typeof AppInvestorTaxRoute
   AppInvestorTransactionsRoute: typeof AppInvestorTransactionsRoute
@@ -550,6 +570,7 @@ const AppRouteChildren: AppRouteChildren = {
   AppInvestorInsightsRoute: AppInvestorInsightsRoute,
   AppInvestorPortfolioRoute: AppInvestorPortfolioRouteWithChildren,
   AppInvestorProfileRoute: AppInvestorProfileRoute,
+  AppInvestorReportsRoute: AppInvestorReportsRoute,
   AppInvestorSipsRoute: AppInvestorSipsRoute,
   AppInvestorTaxRoute: AppInvestorTaxRoute,
   AppInvestorTransactionsRoute: AppInvestorTransactionsRoute,

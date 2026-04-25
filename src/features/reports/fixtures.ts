@@ -1,0 +1,48 @@
+import type { ReportJob } from "@/types/reports";
+
+export const REPORT_JOBS_FIXTURE: ReportJob[] = [
+  {
+    id: "rpt_2026_03_wealth",
+    kind: "wealth",
+    format: "pdf",
+    period: "current_fy",
+    status: "ready",
+    requestedAt: "2026-04-12T10:14:00Z",
+    readyAt: "2026-04-12T10:14:42Z",
+    fileSizeKb: 482,
+    downloadUrl: "#",
+  },
+  {
+    id: "rpt_2026_03_pnl",
+    kind: "pnl",
+    format: "xlsx",
+    period: "previous_fy",
+    status: "ready",
+    requestedAt: "2026-04-08T08:02:00Z",
+    readyAt: "2026-04-08T08:02:38Z",
+    fileSizeKb: 96,
+    downloadUrl: "#",
+  },
+  {
+    id: "rpt_2026_03_cg",
+    kind: "capital_gain",
+    format: "pdf",
+    period: "previous_fy",
+    status: "ready",
+    requestedAt: "2026-04-02T17:31:00Z",
+    readyAt: "2026-04-02T17:31:55Z",
+    fileSizeKb: 318,
+    downloadUrl: "#",
+  },
+  {
+    id: "rpt_2026_03_txn",
+    kind: "transaction_statement",
+    format: "csv",
+    period: "last_90d",
+    status: "ready",
+    requestedAt: "2026-03-29T11:08:00Z",
+    readyAt: "2026-03-29T11:08:21Z",
+    fileSizeKb: 41,
+    downloadUrl: "#",
+  },
+];
