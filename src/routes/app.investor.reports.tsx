@@ -274,21 +274,32 @@ function ReportsPage() {
               key={spec.kind}
               spec={spec}
               isPending={request.isPending && request.variables?.kind === spec.kind}
-              onGenerate={(format, period) =>
+              onGenerate={(values) => {
+                const { format, period, fromDate, toDate } = values;
+                const rangeNote =
+                  period === "custom" && fromDate && toDate
+                    ? `${formatDate(fromDate.toISOString())} → ${formatDate(toDate.toISOString())}`
+                    : PERIOD_LABEL[period];
                 request.mutate(
-                  { kind: spec.kind, format, period },
+                  {
+                    kind: spec.kind,
+                    format,
+                    period,
+                    fromDate: fromDate?.toISOString(),
+                    toDate: toDate?.toISOString(),
+                  },
                   {
                     onSuccess: () => {
                       toast.success(`${KIND_LABEL[spec.kind]} queued`, {
-                        description: `${FORMAT_LABEL[format]} · ${PERIOD_LABEL[period]} — usually ready in a minute.`,
+                        description: `${FORMAT_LABEL[format]} · ${rangeNote} — usually ready in a minute.`,
                       });
                     },
                     onError: () => {
                       toast.error("Couldn't queue the report. Please try again.");
                     },
                   },
-                )
-              }
+                );
+              }}
             />
           ))}
         </div>
