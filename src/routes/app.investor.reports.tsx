@@ -379,14 +379,27 @@ function ReportsPage() {
 interface ReportCardProps {
   spec: ReportSpec;
   isPending: boolean;
-  onGenerate: (format: ReportFormat, period: ReportPeriod) => void;
+  onGenerate: (values: ReportRequestFormValues) => void;
 }
 
 function ReportCard({ spec, isPending, onGenerate }: ReportCardProps) {
-  const [format, setFormat] = useState<ReportFormat>(spec.defaultFormat);
-  const [period, setPeriod] = useState<ReportPeriod>(spec.defaultPeriod);
   const Icon = spec.icon;
+
+  const form = useForm<ReportRequestFormValues>({
+    resolver: zodResolver(reportRequestSchema),
+    mode: "onChange",
+    defaultValues: {
+      format: spec.defaultFormat,
+      period: spec.defaultPeriod,
+      fromDate: undefined,
+      toDate: undefined,
+    },
+  });
+
+  const period = form.watch("period");
+  const format = form.watch("format");
   const FormatIcon = FORMAT_ICON[format];
+  const today = useMemo(() => new Date(), []);
 
   return (
     <Card className="overflow-hidden shadow-card">
@@ -405,42 +418,163 @@ function ReportCard({ spec, isPending, onGenerate }: ReportCardProps) {
           <h3 className="text-base font-semibold">{spec.title}</h3>
           <p className="mt-1 text-sm text-muted-foreground">{spec.description}</p>
         </div>
-        <div className="grid gap-2 sm:grid-cols-2">
-          <Select value={period} onValueChange={(v) => setPeriod(v as ReportPeriod)}>
-            <SelectTrigger>
-              <SelectValue placeholder="Period" />
-            </SelectTrigger>
-            <SelectContent>
-              {(Object.keys(PERIOD_LABEL) as ReportPeriod[])
-                .filter((p) => p !== "custom")
-                .map((p) => (
-                  <SelectItem key={p} value={p}>
-                    {PERIOD_LABEL[p]}
-                  </SelectItem>
-                ))}
-            </SelectContent>
-          </Select>
-          <Select value={format} onValueChange={(v) => setFormat(v as ReportFormat)}>
-            <SelectTrigger>
-              <SelectValue placeholder="Format" />
-            </SelectTrigger>
-            <SelectContent>
-              {spec.formats.map((f) => (
-                <SelectItem key={f} value={f}>
-                  {FORMAT_LABEL[f]}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-        </div>
-        <Button className="w-full gap-2" onClick={() => onGenerate(format, period)} disabled={isPending}>
-          {isPending ? (
-            <Loader2 className="h-4 w-4 animate-spin" />
-          ) : (
-            <FormatIcon className="h-4 w-4" />
-          )}
-          {isPending ? "Queuing…" : `Generate ${FORMAT_LABEL[format]}`}
-        </Button>
+
+        <Form {...form}>
+          <form onSubmit={form.handleSubmit(onGenerate)} className="space-y-3">
+            <div className="grid gap-2 sm:grid-cols-2">
+              <FormField
+                control={form.control}
+                name="period"
+                render={({ field }) => (
+                  <FormItem className="space-y-1.5">
+                    <FormLabel className="text-xs font-medium text-muted-foreground">Period</FormLabel>
+                    <Select
+                      value={field.value}
+                      onValueChange={(v) => {
+                        field.onChange(v as ReportPeriod);
+                        if (v !== "custom") {
+                          form.setValue("fromDate", undefined, { shouldValidate: true });
+                          form.setValue("toDate", undefined, { shouldValidate: true });
+                        }
+                      }}
+                    >
+                      <FormControl>
+                        <SelectTrigger>
+                          <SelectValue placeholder="Period" />
+                        </SelectTrigger>
+                      </FormControl>
+                      <SelectContent>
+                        {(Object.keys(PERIOD_LABEL) as ReportPeriod[]).map((p) => (
+                          <SelectItem key={p} value={p}>
+                            {PERIOD_LABEL[p]}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                    <FormMessage className="text-xs" />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="format"
+                render={({ field }) => (
+                  <FormItem className="space-y-1.5">
+                    <FormLabel className="text-xs font-medium text-muted-foreground">Format</FormLabel>
+                    <Select value={field.value} onValueChange={(v) => field.onChange(v as ReportFormat)}>
+                      <FormControl>
+                        <SelectTrigger>
+                          <SelectValue placeholder="Format" />
+                        </SelectTrigger>
+                      </FormControl>
+                      <SelectContent>
+                        {spec.formats.map((f) => (
+                          <SelectItem key={f} value={f}>
+                            {FORMAT_LABEL[f]}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                    <FormMessage className="text-xs" />
+                  </FormItem>
+                )}
+              />
+            </div>
+
+            {period === "custom" && (
+              <div className="grid gap-2 rounded-lg border border-dashed border-border bg-secondary/30 p-3 sm:grid-cols-2">
+                <FormField
+                  control={form.control}
+                  name="fromDate"
+                  render={({ field }) => (
+                    <FormItem className="space-y-1.5">
+                      <FormLabel className="text-xs font-medium text-muted-foreground">From</FormLabel>
+                      <Popover>
+                        <PopoverTrigger asChild>
+                          <FormControl>
+                            <Button
+                              type="button"
+                              variant="outline"
+                              className={cn(
+                                "w-full justify-start text-left font-normal",
+                                !field.value && "text-muted-foreground",
+                              )}
+                            >
+                              <CalendarIcon className="mr-2 h-4 w-4 opacity-70" />
+                              {field.value ? formatDateFns(field.value, "PPP") : <span>Pick a date</span>}
+                            </Button>
+                          </FormControl>
+                        </PopoverTrigger>
+                        <PopoverContent className="w-auto p-0" align="start">
+                          <Calendar
+                            mode="single"
+                            selected={field.value}
+                            onSelect={field.onChange}
+                            disabled={(date) => date > today || date < new Date("2000-01-01")}
+                            initialFocus
+                            className={cn("p-3 pointer-events-auto")}
+                          />
+                        </PopoverContent>
+                      </Popover>
+                      <FormMessage className="text-xs" />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="toDate"
+                  render={({ field }) => {
+                    const fromVal = form.watch("fromDate");
+                    return (
+                      <FormItem className="space-y-1.5">
+                        <FormLabel className="text-xs font-medium text-muted-foreground">To</FormLabel>
+                        <Popover>
+                          <PopoverTrigger asChild>
+                            <FormControl>
+                              <Button
+                                type="button"
+                                variant="outline"
+                                className={cn(
+                                  "w-full justify-start text-left font-normal",
+                                  !field.value && "text-muted-foreground",
+                                )}
+                              >
+                                <CalendarIcon className="mr-2 h-4 w-4 opacity-70" />
+                                {field.value ? formatDateFns(field.value, "PPP") : <span>Pick a date</span>}
+                              </Button>
+                            </FormControl>
+                          </PopoverTrigger>
+                          <PopoverContent className="w-auto p-0" align="start">
+                            <Calendar
+                              mode="single"
+                              selected={field.value}
+                              onSelect={field.onChange}
+                              disabled={(date) =>
+                                date > today || (fromVal ? date < fromVal : date < new Date("2000-01-01"))
+                              }
+                              initialFocus
+                              className={cn("p-3 pointer-events-auto")}
+                            />
+                          </PopoverContent>
+                        </Popover>
+                        <FormMessage className="text-xs" />
+                      </FormItem>
+                    );
+                  }}
+                />
+              </div>
+            )}
+
+            <Button type="submit" className="w-full gap-2" disabled={isPending}>
+              {isPending ? (
+                <Loader2 className="h-4 w-4 animate-spin" />
+              ) : (
+                <FormatIcon className="h-4 w-4" />
+              )}
+              {isPending ? "Queuing…" : `Generate ${FORMAT_LABEL[format]}`}
+            </Button>
+          </form>
+        </Form>
       </CardContent>
     </Card>
   );
