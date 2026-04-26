@@ -14,6 +14,8 @@ import {
   TrendingUp,
   Repeat,
   FileBarChart,
+  LineChart,
+  BadgeCheck,
   type LucideIcon,
 } from "lucide-react";
 import type { UserRole } from "@/types/auth";
@@ -55,13 +57,17 @@ const investorNav: NavSection[] = [
     items: [
       { label: "Goals", to: "/app/investor/goals", icon: Target },
       { label: "Tax Harvesting", to: "/app/investor/tax", icon: Calculator },
+      { label: "Calculators", to: "/app/investor/calculators", icon: LineChart },
       { label: "Reports", to: "/app/investor/reports", icon: FileBarChart },
       { label: "AI Insights", to: "/app/investor/insights", icon: Sparkles, badge: "Beta" },
     ],
   },
   {
     label: "Account",
-    items: [{ label: "KYC & Profile", to: "/app/investor/profile", icon: ShieldCheck }],
+    items: [
+      { label: "KYC & Profile", to: "/app/investor/profile", icon: ShieldCheck },
+      { label: "Verification Tools", to: "/app/investor/verify", icon: BadgeCheck },
+    ],
   },
 ];
 

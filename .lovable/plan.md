@@ -1,167 +1,60 @@
-# B2C Backend-Gap Fill — SIPs, Mandates, Folios, Password
+# B2C: Verification Tools + Financial Calculators
 
-The investor portal currently has wizards to **create** SIPs/lumpsum/redeem/switch orders, but no management surface for active SIPs, NACH mandates, folio drill-downs, or password changes. This plan closes those gaps using the same architectural patterns already in place (feature-sliced, Axios + custom React Query hooks, RHF + Zod, fixtures gated by `env.USE_MOCK_API`).
+Add two new investor-portal areas that the backend supports but the frontend doesn't yet expose:
 
----
+1. **Verification Tools** — user-facing forms for BSE PAN check and NDML KYC status lookup (today KYC is only a read-only timeline).
+2. **Calculators** — a dedicated hub of financial calculators (SIP projection, lumpsum projection, goal/target SIP, retirement planner) separate from the existing Goals flow.
 
-## 1. SIP Management
-
-### 1a. Types — `src/types/sip.ts` (new)
-```ts
-export type SipStatus = "active" | "paused" | "cancelled" | "completed";
-export interface ActiveSip {
-  id: string;
-  schemeCode: string;
-  schemeName: string;
-  amc: string;
-  monthlyAmount: number;
-  frequency: "monthly" | "quarterly";
-  nextInstallmentDate: string;
-  startDate: string;
-  endDate?: string;
-  installmentsDone: number;
-  totalInstallments: number | null; // null = perpetual
-  status: SipStatus;
-  mandateRef: string;
-  folioNumber: string;
-  bankAccountId: string;
-}
-export interface UpcomingInstallment {
-  sipId: string;
-  schemeName: string;
-  amount: number;
-  dueDate: string;
-  status: "scheduled" | "processing" | "failed";
-}
-```
-
-### 1b. API + fixtures — `src/features/sips/{api.ts,fixtures.ts}` (new)
-- `useActiveSipsQuery()`, `useUpcomingInstallmentsQuery()`, `usePauseSipMutation()`, `useResumeSipMutation()`, `useCancelSipMutation()`.
-- Mock list of ~6 SIPs across statuses; mutations update an in-memory queryClient cache so UI feels real.
-
-### 1c. Route — `src/routes/app.investor.sips.tsx` (new, "SIP Dashboard")
-- `PageHeader` with "Start new SIP" CTA → `/app/investor/orders/sip`.
-- **Summary strip**: Active SIPs count · Total monthly outflow · Next debit date · Failed in last 30d.
-- **Tabs**: Active / Paused / Cancelled / Upcoming installments.
-  - Active/Paused/Cancelled tabs render a `DataTable` (scheme, monthly amount, next date, installments x/y, status `StatusBadge`, actions).
-  - Per-row actions: **Pause / Resume / Cancel** (`AlertDialog` confirm), **View folio** → `/app/investor/folios/$folioNumber`.
-  - Upcoming tab: timeline-style list grouped by month with amount + status badge.
-
-### 1d. Navigation
-- Add `{ label: "SIPs", to: "/app/investor/sips", icon: Repeat }` to the **Invest** section in `src/config/navigation.ts` (between SIP wizard and Redeem) — the wizard route stays for *creating* SIPs.
+Both follow the existing patterns: feature-sliced folders, custom React Query hooks, RHF + Zod, Recharts for charts, fixtures for now (real Django endpoints can be wired later by swapping the api files).
 
 ---
 
-## 2. Mandates
+## 1. Verification Tools (`/app/investor/verify`)
 
-### 2a. Types — `src/types/mandate.ts` (new)
-```ts
-export type MandateStatus = "pending" | "active" | "rejected" | "expired";
-export interface Mandate {
-  id: string;
-  bankAccountId: string;
-  bankName: string;
-  accountMasked: string;
-  amountLimit: number;
-  status: MandateStatus;
-  createdAt: string;
-  approvedAt?: string;
-  failureReason?: string;
-  umrn?: string;
-}
-```
+A single route with two cards in tabs:
 
-### 2b. API — `src/features/mandates/{api.ts,fixtures.ts,schemas.ts}` (new)
-- `useMandatesQuery()`, `useCreateMandateMutation()`, `useRetryMandateMutation()`.
-- Zod `createMandateSchema`: `bankAccountId`, `amountLimit` (₹500–₹10L).
+- **PAN Verification** (BSE PAN check)
+  - Form: PAN (regex `^[A-Z]{5}[0-9]{4}[A-Z]$`), Full name, DOB.
+  - On submit, calls `useVerifyPanMutation` (mock: returns `{ status: "valid"|"invalid", nameMatch, panHolderName, category, lastChecked }`).
+  - Result card shows status badge, name-match indicator, raw response, "Re-check" button.
+- **NDML KYC Status**
+  - Form: PAN only.
+  - Calls `useNdmlKycStatusMutation` (mock: returns `{ kycStatus: "verified"|"in_review"|"rejected"|"not_found", provider, lastUpdated, holderName, kraSource }`).
+  - Result card shows status badge with provider, last-updated, and a "Start KYC" CTA when `not_found` or `rejected` (links to `/app/investor/profile`).
 
-### 2c. Mandates panel inside SIP Dashboard
-- Add a **"Bank mandates"** section/tab on `/app/investor/sips` (no separate route — keeps nav clean).
-- Card list of mandates with status badges; "Add mandate" opens `CreateMandateDialog` (RHF + Zod, picks from KYC bank list); "Retry" button on `rejected`/`expired` rows fires `useRetryMandateMutation`.
-- New components: `src/features/mandates/components/{create-mandate-dialog.tsx,mandate-card.tsx}`.
+Both cards use the existing `StatusBadge`, `Card`, `Form`, `Input`, `Button`, and `Loader2` patterns. Recent checks are kept in an in-memory store and shown as a small "Recent verifications" list under each tab.
 
----
+Sidebar entry added to **Account** section: `Verification Tools` (icon: `BadgeCheck`).
 
-## 3. Folio Detail
+## 2. Financial Calculators (`/app/investor/calculators`)
 
-### 3a. Types — extend `src/types/portfolio.ts`
-```ts
-export interface FolioDetail {
-  folioNumber: string;
-  amc: string;
-  amcLogoSeed: string;
-  registrar: "CAMS" | "KFintech";
-  holdings: Holding[];           // schemes under this folio
-  totalInvested: number;
-  totalCurrentValue: number;
-  totalUnrealizedGain: number;
-  recentTransactions: Array<{ id: string; date: string; type: string; amount: number; units: number; nav: number; }>;
-  linkedSips: ActiveSip[];
-  linkedBankAccountId: string;
-  nominees: string[];
-}
-```
+Single route with a tabbed layout containing four calculators. Each renders an RHF form on the left and a live result panel + Recharts area chart on the right.
 
-### 3b. API — extend `src/features/portfolio/api.ts`
-- Add `useFolioDetailQuery(folioNumber)` resolving from a new `FOLIOS_FIXTURE` (group existing holdings by synthetic folio number, e.g., `"123456789"`, `"987654321"`).
+- **SIP Calculator** — inputs: monthly amount, expected annual return %, tenure (years), step-up % (optional). Outputs: invested, future value, wealth gained; year-wise growth chart.
+- **Lumpsum Calculator** — inputs: amount, return %, tenure. Outputs: invested, FV, gain; growth chart.
+- **Goal SIP Calculator** — inputs: target corpus, tenure, expected return, current savings (optional). Outputs: required monthly SIP; growth chart toward target.
+- **Retirement Planner** — inputs: current age, retirement age, life expectancy, current monthly expense, inflation %, pre-retirement return %, post-retirement return %. Outputs: corpus needed at retirement, required monthly SIP today, expense projection chart.
 
-### 3c. Route — `src/routes/app.investor.folios.$folioNumber.tsx` (new)
-- Hero: AMC name + folio number + registrar pill + total invested/current/gain stats.
-- Sections: **Schemes in this folio** (table → links to existing holding detail), **Recent transactions** (last 10), **Linked SIPs** (cards), **Bank & nominee** info.
-- Actions: "Invest more" (lumpsum wizard with prefilled scheme), "Start SIP" (sip wizard), "Switch", "Redeem".
+All math runs client-side in pure helpers under `src/features/calculators/math.ts`. Schemas in `src/features/calculators/schemas.ts`. Each calculator uses `<Form>` from `@/components/ui/form` with Zod `superRefine` for cross-field rules (e.g. retirement age > current age).
 
-### 3d. Wire-up
-- On `app.investor.portfolio.$holdingId.tsx`, add a "View folio" button next to existing actions linking to `/app/investor/folios/$folioNumber`.
-- On the SIP Dashboard, the "View folio" row action also targets this route.
-
----
-
-## 4. Password Management
-
-### 4a. Types & schemas
-- Extend `src/features/auth/schemas.ts`:
-  - `passwordChangeSchema` (currentPassword, newPassword min 8, confirmPassword match).
-  - `passwordResetSchema` (token from URL search, newPassword, confirmPassword).
-- Extend `src/types/auth.ts` with `PasswordChangePayload`, `PasswordResetPayload`.
-
-### 4b. API — extend `src/features/auth/api.ts`
-- Add to `authApi`: `changePassword(payload)`, `resetPassword(payload)` — both mock-aware (mock rejects if `currentPassword !== "password123"`).
-- Hooks: `useChangePasswordMutation()`, `useResetPasswordMutation()`.
-
-### 4c. Routes
-- **Change password** — add as a new tab/section inside existing `src/routes/app.settings.tsx` ("Security" tab with form). Avoids new sidebar entry.
-- **Reset password** — new route `src/routes/reset-password.tsx` (public). Reads token via `validateSearch` (`z.object({ token: z.string() })`), shows new-password form, calls `useResetPasswordMutation`, redirects to `/login` with toast.
-- **Forgot password** — already exists at `src/routes/forgot-password.tsx`; update it so the success message references the new `/reset-password?token=...` link wording.
-
----
-
-## 5. Verification
-
-- `/app/investor/sips` → tabs render mock SIPs; pause/resume/cancel optimistically update; "Upcoming" tab lists installments grouped by month.
-- "Bank mandates" section shows fixture mandates; create dialog validates and prepends a new pending mandate; retry flips a rejected mandate to pending.
-- `/app/investor/folios/123456789` renders folio detail with schemes table, transactions, linked SIPs, and quick-action buttons.
-- `app.settings.tsx` "Security" tab has a working change-password form (mock validates current password).
-- `/reset-password?token=abc` renders a new-password form and routes to `/login` on success.
-- All existing flows (4 order wizards, KYC dialogs, goals wizard, scheme detail, holding detail) continue to work.
+Sidebar entry added to **Plan** section: `Calculators` (icon: `Calculator` reused; rename current Tax Harvesting nav icon to `Receipt` to avoid collision, OR use `LineChart` for Calculators — final choice: `LineChart`).
 
 ---
 
 ## Files
 
-**Created**
-- `src/types/sip.ts`, `src/types/mandate.ts`
-- `src/features/sips/{api.ts,fixtures.ts}`
-- `src/features/mandates/{api.ts,fixtures.ts,schemas.ts,components/create-mandate-dialog.tsx,components/mandate-card.tsx}`
-- `src/routes/app.investor.sips.tsx`
-- `src/routes/app.investor.folios.$folioNumber.tsx`
-- `src/routes/reset-password.tsx`
+**New**
+- `src/types/verification.ts` — `PanVerificationResult`, `NdmlKycStatusResult`.
+- `src/features/verification/api.ts` — `useVerifyPanMutation`, `useNdmlKycStatusMutation`, `useRecentVerificationsQuery` (in-memory store).
+- `src/features/verification/schemas.ts` — Zod schemas for both forms.
+- `src/features/verification/fixtures.ts` — sample responses for valid/invalid PANs and KYC statuses.
+- `src/routes/app.investor.verify.tsx`
+- `src/features/calculators/math.ts` — pure functions: `sipFutureValue`, `stepUpSipFutureValue`, `lumpsumFutureValue`, `requiredSipForGoal`, `retirementCorpus`, plus `*Series` helpers returning year-wise arrays for charts.
+- `src/features/calculators/schemas.ts`
+- `src/features/calculators/components/result-chart.tsx` — shared Recharts area chart wrapper.
+- `src/routes/app.investor.calculators.tsx`
 
 **Edited**
-- `src/config/navigation.ts` — add SIPs entry
-- `src/types/portfolio.ts` — add `FolioDetail`
-- `src/features/portfolio/{api.ts,fixtures.ts}` — add folio query + fixture
-- `src/types/auth.ts` — add password payload types
-- `src/features/auth/{api.ts,schemas.ts}` — add change/reset password
-- `src/routes/app.settings.tsx` — add "Security" tab with change-password form
-- `src/routes/app.investor.portfolio.$holdingId.tsx` — add "View folio" link
-- `src/routes/forgot-password.tsx` — minor copy update for reset-link wording
+- `src/config/navigation.ts` — add the two nav entries.
+
+After approval and implementation we'll run `bun run build:dev` to confirm a clean build.

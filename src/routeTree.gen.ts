@@ -18,6 +18,7 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as AppSettingsRouteImport } from './routes/app.settings'
 import { Route as AppNotificationsRouteImport } from './routes/app.notifications'
 import { Route as AppInvestorIndexRouteImport } from './routes/app.investor.index'
+import { Route as AppInvestorVerifyRouteImport } from './routes/app.investor.verify'
 import { Route as AppInvestorTransactionsRouteImport } from './routes/app.investor.transactions'
 import { Route as AppInvestorTaxRouteImport } from './routes/app.investor.tax'
 import { Route as AppInvestorSipsRouteImport } from './routes/app.investor.sips'
@@ -27,6 +28,7 @@ import { Route as AppInvestorPortfolioRouteImport } from './routes/app.investor.
 import { Route as AppInvestorInsightsRouteImport } from './routes/app.investor.insights'
 import { Route as AppInvestorGoalsRouteImport } from './routes/app.investor.goals'
 import { Route as AppInvestorExploreRouteImport } from './routes/app.investor.explore'
+import { Route as AppInvestorCalculatorsRouteImport } from './routes/app.investor.calculators'
 import { Route as AppInvestorPortfolioHoldingIdRouteImport } from './routes/app.investor.portfolio.$holdingId'
 import { Route as AppInvestorOrdersSwitchRouteImport } from './routes/app.investor.orders.switch'
 import { Route as AppInvestorOrdersSipRouteImport } from './routes/app.investor.orders.sip'
@@ -80,6 +82,11 @@ const AppInvestorIndexRoute = AppInvestorIndexRouteImport.update({
   path: '/investor/',
   getParentRoute: () => AppRoute,
 } as any)
+const AppInvestorVerifyRoute = AppInvestorVerifyRouteImport.update({
+  id: '/investor/verify',
+  path: '/investor/verify',
+  getParentRoute: () => AppRoute,
+} as any)
 const AppInvestorTransactionsRoute = AppInvestorTransactionsRouteImport.update({
   id: '/investor/transactions',
   path: '/investor/transactions',
@@ -123,6 +130,11 @@ const AppInvestorGoalsRoute = AppInvestorGoalsRouteImport.update({
 const AppInvestorExploreRoute = AppInvestorExploreRouteImport.update({
   id: '/investor/explore',
   path: '/investor/explore',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppInvestorCalculatorsRoute = AppInvestorCalculatorsRouteImport.update({
+  id: '/investor/calculators',
+  path: '/investor/calculators',
   getParentRoute: () => AppRoute,
 } as any)
 const AppInvestorPortfolioHoldingIdRoute =
@@ -174,6 +186,7 @@ export interface FileRoutesByFullPath {
   '/signup': typeof SignupRoute
   '/app/notifications': typeof AppNotificationsRoute
   '/app/settings': typeof AppSettingsRoute
+  '/app/investor/calculators': typeof AppInvestorCalculatorsRoute
   '/app/investor/explore': typeof AppInvestorExploreRouteWithChildren
   '/app/investor/goals': typeof AppInvestorGoalsRoute
   '/app/investor/insights': typeof AppInvestorInsightsRoute
@@ -183,6 +196,7 @@ export interface FileRoutesByFullPath {
   '/app/investor/sips': typeof AppInvestorSipsRoute
   '/app/investor/tax': typeof AppInvestorTaxRoute
   '/app/investor/transactions': typeof AppInvestorTransactionsRoute
+  '/app/investor/verify': typeof AppInvestorVerifyRoute
   '/app/investor/': typeof AppInvestorIndexRoute
   '/app/investor/explore/$schemeId': typeof AppInvestorExploreSchemeIdRoute
   '/app/investor/folios/$folioNumber': typeof AppInvestorFoliosFolioNumberRoute
@@ -201,6 +215,7 @@ export interface FileRoutesByTo {
   '/signup': typeof SignupRoute
   '/app/notifications': typeof AppNotificationsRoute
   '/app/settings': typeof AppSettingsRoute
+  '/app/investor/calculators': typeof AppInvestorCalculatorsRoute
   '/app/investor/explore': typeof AppInvestorExploreRouteWithChildren
   '/app/investor/goals': typeof AppInvestorGoalsRoute
   '/app/investor/insights': typeof AppInvestorInsightsRoute
@@ -210,6 +225,7 @@ export interface FileRoutesByTo {
   '/app/investor/sips': typeof AppInvestorSipsRoute
   '/app/investor/tax': typeof AppInvestorTaxRoute
   '/app/investor/transactions': typeof AppInvestorTransactionsRoute
+  '/app/investor/verify': typeof AppInvestorVerifyRoute
   '/app/investor': typeof AppInvestorIndexRoute
   '/app/investor/explore/$schemeId': typeof AppInvestorExploreSchemeIdRoute
   '/app/investor/folios/$folioNumber': typeof AppInvestorFoliosFolioNumberRoute
@@ -229,6 +245,7 @@ export interface FileRoutesById {
   '/signup': typeof SignupRoute
   '/app/notifications': typeof AppNotificationsRoute
   '/app/settings': typeof AppSettingsRoute
+  '/app/investor/calculators': typeof AppInvestorCalculatorsRoute
   '/app/investor/explore': typeof AppInvestorExploreRouteWithChildren
   '/app/investor/goals': typeof AppInvestorGoalsRoute
   '/app/investor/insights': typeof AppInvestorInsightsRoute
@@ -238,6 +255,7 @@ export interface FileRoutesById {
   '/app/investor/sips': typeof AppInvestorSipsRoute
   '/app/investor/tax': typeof AppInvestorTaxRoute
   '/app/investor/transactions': typeof AppInvestorTransactionsRoute
+  '/app/investor/verify': typeof AppInvestorVerifyRoute
   '/app/investor/': typeof AppInvestorIndexRoute
   '/app/investor/explore/$schemeId': typeof AppInvestorExploreSchemeIdRoute
   '/app/investor/folios/$folioNumber': typeof AppInvestorFoliosFolioNumberRoute
@@ -258,6 +276,7 @@ export interface FileRouteTypes {
     | '/signup'
     | '/app/notifications'
     | '/app/settings'
+    | '/app/investor/calculators'
     | '/app/investor/explore'
     | '/app/investor/goals'
     | '/app/investor/insights'
@@ -267,6 +286,7 @@ export interface FileRouteTypes {
     | '/app/investor/sips'
     | '/app/investor/tax'
     | '/app/investor/transactions'
+    | '/app/investor/verify'
     | '/app/investor/'
     | '/app/investor/explore/$schemeId'
     | '/app/investor/folios/$folioNumber'
@@ -285,6 +305,7 @@ export interface FileRouteTypes {
     | '/signup'
     | '/app/notifications'
     | '/app/settings'
+    | '/app/investor/calculators'
     | '/app/investor/explore'
     | '/app/investor/goals'
     | '/app/investor/insights'
@@ -294,6 +315,7 @@ export interface FileRouteTypes {
     | '/app/investor/sips'
     | '/app/investor/tax'
     | '/app/investor/transactions'
+    | '/app/investor/verify'
     | '/app/investor'
     | '/app/investor/explore/$schemeId'
     | '/app/investor/folios/$folioNumber'
@@ -312,6 +334,7 @@ export interface FileRouteTypes {
     | '/signup'
     | '/app/notifications'
     | '/app/settings'
+    | '/app/investor/calculators'
     | '/app/investor/explore'
     | '/app/investor/goals'
     | '/app/investor/insights'
@@ -321,6 +344,7 @@ export interface FileRouteTypes {
     | '/app/investor/sips'
     | '/app/investor/tax'
     | '/app/investor/transactions'
+    | '/app/investor/verify'
     | '/app/investor/'
     | '/app/investor/explore/$schemeId'
     | '/app/investor/folios/$folioNumber'
@@ -405,6 +429,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppInvestorIndexRouteImport
       parentRoute: typeof AppRoute
     }
+    '/app/investor/verify': {
+      id: '/app/investor/verify'
+      path: '/investor/verify'
+      fullPath: '/app/investor/verify'
+      preLoaderRoute: typeof AppInvestorVerifyRouteImport
+      parentRoute: typeof AppRoute
+    }
     '/app/investor/transactions': {
       id: '/app/investor/transactions'
       path: '/investor/transactions'
@@ -466,6 +497,13 @@ declare module '@tanstack/react-router' {
       path: '/investor/explore'
       fullPath: '/app/investor/explore'
       preLoaderRoute: typeof AppInvestorExploreRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/app/investor/calculators': {
+      id: '/app/investor/calculators'
+      path: '/investor/calculators'
+      fullPath: '/app/investor/calculators'
+      preLoaderRoute: typeof AppInvestorCalculatorsRouteImport
       parentRoute: typeof AppRoute
     }
     '/app/investor/portfolio/$holdingId': {
@@ -545,6 +583,7 @@ const AppInvestorPortfolioRouteWithChildren =
 interface AppRouteChildren {
   AppNotificationsRoute: typeof AppNotificationsRoute
   AppSettingsRoute: typeof AppSettingsRoute
+  AppInvestorCalculatorsRoute: typeof AppInvestorCalculatorsRoute
   AppInvestorExploreRoute: typeof AppInvestorExploreRouteWithChildren
   AppInvestorGoalsRoute: typeof AppInvestorGoalsRoute
   AppInvestorInsightsRoute: typeof AppInvestorInsightsRoute
@@ -554,6 +593,7 @@ interface AppRouteChildren {
   AppInvestorSipsRoute: typeof AppInvestorSipsRoute
   AppInvestorTaxRoute: typeof AppInvestorTaxRoute
   AppInvestorTransactionsRoute: typeof AppInvestorTransactionsRoute
+  AppInvestorVerifyRoute: typeof AppInvestorVerifyRoute
   AppInvestorIndexRoute: typeof AppInvestorIndexRoute
   AppInvestorFoliosFolioNumberRoute: typeof AppInvestorFoliosFolioNumberRoute
   AppInvestorOrdersLumpsumRoute: typeof AppInvestorOrdersLumpsumRoute
@@ -565,6 +605,7 @@ interface AppRouteChildren {
 const AppRouteChildren: AppRouteChildren = {
   AppNotificationsRoute: AppNotificationsRoute,
   AppSettingsRoute: AppSettingsRoute,
+  AppInvestorCalculatorsRoute: AppInvestorCalculatorsRoute,
   AppInvestorExploreRoute: AppInvestorExploreRouteWithChildren,
   AppInvestorGoalsRoute: AppInvestorGoalsRoute,
   AppInvestorInsightsRoute: AppInvestorInsightsRoute,
@@ -574,6 +615,7 @@ const AppRouteChildren: AppRouteChildren = {
   AppInvestorSipsRoute: AppInvestorSipsRoute,
   AppInvestorTaxRoute: AppInvestorTaxRoute,
   AppInvestorTransactionsRoute: AppInvestorTransactionsRoute,
+  AppInvestorVerifyRoute: AppInvestorVerifyRoute,
   AppInvestorIndexRoute: AppInvestorIndexRoute,
   AppInvestorFoliosFolioNumberRoute: AppInvestorFoliosFolioNumberRoute,
   AppInvestorOrdersLumpsumRoute: AppInvestorOrdersLumpsumRoute,
