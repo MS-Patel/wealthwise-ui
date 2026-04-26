@@ -28,6 +28,7 @@ import { Route as AppInvestorPortfolioRouteImport } from './routes/app.investor.
 import { Route as AppInvestorInsightsRouteImport } from './routes/app.investor.insights'
 import { Route as AppInvestorGoalsRouteImport } from './routes/app.investor.goals'
 import { Route as AppInvestorExploreRouteImport } from './routes/app.investor.explore'
+import { Route as AppInvestorCalculatorsRouteImport } from './routes/app.investor.calculators'
 import { Route as AppInvestorPortfolioHoldingIdRouteImport } from './routes/app.investor.portfolio.$holdingId'
 import { Route as AppInvestorOrdersSwitchRouteImport } from './routes/app.investor.orders.switch'
 import { Route as AppInvestorOrdersSipRouteImport } from './routes/app.investor.orders.sip'
@@ -131,6 +132,11 @@ const AppInvestorExploreRoute = AppInvestorExploreRouteImport.update({
   path: '/investor/explore',
   getParentRoute: () => AppRoute,
 } as any)
+const AppInvestorCalculatorsRoute = AppInvestorCalculatorsRouteImport.update({
+  id: '/investor/calculators',
+  path: '/investor/calculators',
+  getParentRoute: () => AppRoute,
+} as any)
 const AppInvestorPortfolioHoldingIdRoute =
   AppInvestorPortfolioHoldingIdRouteImport.update({
     id: '/$holdingId',
@@ -180,6 +186,7 @@ export interface FileRoutesByFullPath {
   '/signup': typeof SignupRoute
   '/app/notifications': typeof AppNotificationsRoute
   '/app/settings': typeof AppSettingsRoute
+  '/app/investor/calculators': typeof AppInvestorCalculatorsRoute
   '/app/investor/explore': typeof AppInvestorExploreRouteWithChildren
   '/app/investor/goals': typeof AppInvestorGoalsRoute
   '/app/investor/insights': typeof AppInvestorInsightsRoute
@@ -208,6 +215,7 @@ export interface FileRoutesByTo {
   '/signup': typeof SignupRoute
   '/app/notifications': typeof AppNotificationsRoute
   '/app/settings': typeof AppSettingsRoute
+  '/app/investor/calculators': typeof AppInvestorCalculatorsRoute
   '/app/investor/explore': typeof AppInvestorExploreRouteWithChildren
   '/app/investor/goals': typeof AppInvestorGoalsRoute
   '/app/investor/insights': typeof AppInvestorInsightsRoute
@@ -237,6 +245,7 @@ export interface FileRoutesById {
   '/signup': typeof SignupRoute
   '/app/notifications': typeof AppNotificationsRoute
   '/app/settings': typeof AppSettingsRoute
+  '/app/investor/calculators': typeof AppInvestorCalculatorsRoute
   '/app/investor/explore': typeof AppInvestorExploreRouteWithChildren
   '/app/investor/goals': typeof AppInvestorGoalsRoute
   '/app/investor/insights': typeof AppInvestorInsightsRoute
@@ -267,6 +276,7 @@ export interface FileRouteTypes {
     | '/signup'
     | '/app/notifications'
     | '/app/settings'
+    | '/app/investor/calculators'
     | '/app/investor/explore'
     | '/app/investor/goals'
     | '/app/investor/insights'
@@ -295,6 +305,7 @@ export interface FileRouteTypes {
     | '/signup'
     | '/app/notifications'
     | '/app/settings'
+    | '/app/investor/calculators'
     | '/app/investor/explore'
     | '/app/investor/goals'
     | '/app/investor/insights'
@@ -323,6 +334,7 @@ export interface FileRouteTypes {
     | '/signup'
     | '/app/notifications'
     | '/app/settings'
+    | '/app/investor/calculators'
     | '/app/investor/explore'
     | '/app/investor/goals'
     | '/app/investor/insights'
@@ -487,6 +499,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppInvestorExploreRouteImport
       parentRoute: typeof AppRoute
     }
+    '/app/investor/calculators': {
+      id: '/app/investor/calculators'
+      path: '/investor/calculators'
+      fullPath: '/app/investor/calculators'
+      preLoaderRoute: typeof AppInvestorCalculatorsRouteImport
+      parentRoute: typeof AppRoute
+    }
     '/app/investor/portfolio/$holdingId': {
       id: '/app/investor/portfolio/$holdingId'
       path: '/$holdingId'
@@ -564,6 +583,7 @@ const AppInvestorPortfolioRouteWithChildren =
 interface AppRouteChildren {
   AppNotificationsRoute: typeof AppNotificationsRoute
   AppSettingsRoute: typeof AppSettingsRoute
+  AppInvestorCalculatorsRoute: typeof AppInvestorCalculatorsRoute
   AppInvestorExploreRoute: typeof AppInvestorExploreRouteWithChildren
   AppInvestorGoalsRoute: typeof AppInvestorGoalsRoute
   AppInvestorInsightsRoute: typeof AppInvestorInsightsRoute
@@ -585,6 +605,7 @@ interface AppRouteChildren {
 const AppRouteChildren: AppRouteChildren = {
   AppNotificationsRoute: AppNotificationsRoute,
   AppSettingsRoute: AppSettingsRoute,
+  AppInvestorCalculatorsRoute: AppInvestorCalculatorsRoute,
   AppInvestorExploreRoute: AppInvestorExploreRouteWithChildren,
   AppInvestorGoalsRoute: AppInvestorGoalsRoute,
   AppInvestorInsightsRoute: AppInvestorInsightsRoute,

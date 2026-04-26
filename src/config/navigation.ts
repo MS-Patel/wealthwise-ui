@@ -14,6 +14,8 @@ import {
   TrendingUp,
   Repeat,
   FileBarChart,
+  LineChart,
+  BadgeCheck,
   type LucideIcon,
 } from "lucide-react";
 import type { UserRole } from "@/types/auth";
