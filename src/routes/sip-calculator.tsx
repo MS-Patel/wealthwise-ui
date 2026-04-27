@@ -36,9 +36,9 @@ export const Route = createFileRoute("/sip-calculator")({
 });
 
 const schema = z.object({
-  monthly: z.coerce.number().min(100, "Min ₹100").max(10_00_000, "Too large"),
-  rate: z.coerce.number().min(1, "Min 1%").max(40, "Max 40%"),
-  years: z.coerce.number().int().min(1, "Min 1 year").max(40, "Max 40 years"),
+  monthly: z.number({ error: "Enter amount" }).min(100, "Min ₹100").max(10_00_000, "Too large"),
+  rate: z.number({ error: "Enter return" }).min(1, "Min 1%").max(40, "Max 40%"),
+  years: z.number({ error: "Enter years" }).int("Whole years").min(1, "Min 1 year").max(40, "Max 40 years"),
 });
 type FormValues = z.infer<typeof schema>;
 

@@ -102,12 +102,12 @@ const QUESTIONS: Question[] = [
 ];
 
 const schema = z.object({
-  horizon: z.coerce.number().min(1).max(4),
-  reaction: z.coerce.number().min(1).max(4),
-  income: z.coerce.number().min(1).max(4),
-  experience: z.coerce.number().min(1).max(4),
-  goal: z.coerce.number().min(1).max(4),
-  drawdown: z.coerce.number().min(1).max(4),
+  horizon: z.number({ error: "Pick one" }).min(1).max(4),
+  reaction: z.number({ error: "Pick one" }).min(1).max(4),
+  income: z.number({ error: "Pick one" }).min(1).max(4),
+  experience: z.number({ error: "Pick one" }).min(1).max(4),
+  goal: z.number({ error: "Pick one" }).min(1).max(4),
+  drawdown: z.number({ error: "Pick one" }).min(1).max(4),
 });
 type FormValues = z.infer<typeof schema>;
 
