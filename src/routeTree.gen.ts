@@ -9,10 +9,16 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as UnlistedEquitiesRouteImport } from './routes/unlisted-equities'
+import { Route as SipCalculatorRouteImport } from './routes/sip-calculator'
 import { Route as SignupRouteImport } from './routes/signup'
+import { Route as RiskAnalyzerRouteImport } from './routes/risk-analyzer'
 import { Route as ResetPasswordRouteImport } from './routes/reset-password'
+import { Route as ProductsRouteImport } from './routes/products'
 import { Route as LoginRouteImport } from './routes/login'
+import { Route as LiveMarketRouteImport } from './routes/live-market'
 import { Route as ForgotPasswordRouteImport } from './routes/forgot-password'
+import { Route as ExploreFundsRouteImport } from './routes/explore-funds'
 import { Route as AppRouteImport } from './routes/app'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AppSettingsRouteImport } from './routes/app.settings'
@@ -37,9 +43,24 @@ import { Route as AppInvestorOrdersLumpsumRouteImport } from './routes/app.inves
 import { Route as AppInvestorFoliosFolioNumberRouteImport } from './routes/app.investor.folios.$folioNumber'
 import { Route as AppInvestorExploreSchemeIdRouteImport } from './routes/app.investor.explore.$schemeId'
 
+const UnlistedEquitiesRoute = UnlistedEquitiesRouteImport.update({
+  id: '/unlisted-equities',
+  path: '/unlisted-equities',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SipCalculatorRoute = SipCalculatorRouteImport.update({
+  id: '/sip-calculator',
+  path: '/sip-calculator',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const SignupRoute = SignupRouteImport.update({
   id: '/signup',
   path: '/signup',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const RiskAnalyzerRoute = RiskAnalyzerRouteImport.update({
+  id: '/risk-analyzer',
+  path: '/risk-analyzer',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ResetPasswordRoute = ResetPasswordRouteImport.update({
@@ -47,14 +68,29 @@ const ResetPasswordRoute = ResetPasswordRouteImport.update({
   path: '/reset-password',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ProductsRoute = ProductsRouteImport.update({
+  id: '/products',
+  path: '/products',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const LoginRoute = LoginRouteImport.update({
   id: '/login',
   path: '/login',
   getParentRoute: () => rootRouteImport,
 } as any)
+const LiveMarketRoute = LiveMarketRouteImport.update({
+  id: '/live-market',
+  path: '/live-market',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ForgotPasswordRoute = ForgotPasswordRouteImport.update({
   id: '/forgot-password',
   path: '/forgot-password',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ExploreFundsRoute = ExploreFundsRouteImport.update({
+  id: '/explore-funds',
+  path: '/explore-funds',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AppRoute = AppRouteImport.update({
@@ -180,10 +216,16 @@ const AppInvestorExploreSchemeIdRoute =
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/app': typeof AppRouteWithChildren
+  '/explore-funds': typeof ExploreFundsRoute
   '/forgot-password': typeof ForgotPasswordRoute
+  '/live-market': typeof LiveMarketRoute
   '/login': typeof LoginRoute
+  '/products': typeof ProductsRoute
   '/reset-password': typeof ResetPasswordRoute
+  '/risk-analyzer': typeof RiskAnalyzerRoute
   '/signup': typeof SignupRoute
+  '/sip-calculator': typeof SipCalculatorRoute
+  '/unlisted-equities': typeof UnlistedEquitiesRoute
   '/app/notifications': typeof AppNotificationsRoute
   '/app/settings': typeof AppSettingsRoute
   '/app/investor/calculators': typeof AppInvestorCalculatorsRoute
@@ -209,10 +251,16 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/app': typeof AppRouteWithChildren
+  '/explore-funds': typeof ExploreFundsRoute
   '/forgot-password': typeof ForgotPasswordRoute
+  '/live-market': typeof LiveMarketRoute
   '/login': typeof LoginRoute
+  '/products': typeof ProductsRoute
   '/reset-password': typeof ResetPasswordRoute
+  '/risk-analyzer': typeof RiskAnalyzerRoute
   '/signup': typeof SignupRoute
+  '/sip-calculator': typeof SipCalculatorRoute
+  '/unlisted-equities': typeof UnlistedEquitiesRoute
   '/app/notifications': typeof AppNotificationsRoute
   '/app/settings': typeof AppSettingsRoute
   '/app/investor/calculators': typeof AppInvestorCalculatorsRoute
@@ -239,10 +287,16 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/app': typeof AppRouteWithChildren
+  '/explore-funds': typeof ExploreFundsRoute
   '/forgot-password': typeof ForgotPasswordRoute
+  '/live-market': typeof LiveMarketRoute
   '/login': typeof LoginRoute
+  '/products': typeof ProductsRoute
   '/reset-password': typeof ResetPasswordRoute
+  '/risk-analyzer': typeof RiskAnalyzerRoute
   '/signup': typeof SignupRoute
+  '/sip-calculator': typeof SipCalculatorRoute
+  '/unlisted-equities': typeof UnlistedEquitiesRoute
   '/app/notifications': typeof AppNotificationsRoute
   '/app/settings': typeof AppSettingsRoute
   '/app/investor/calculators': typeof AppInvestorCalculatorsRoute
@@ -270,10 +324,16 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/app'
+    | '/explore-funds'
     | '/forgot-password'
+    | '/live-market'
     | '/login'
+    | '/products'
     | '/reset-password'
+    | '/risk-analyzer'
     | '/signup'
+    | '/sip-calculator'
+    | '/unlisted-equities'
     | '/app/notifications'
     | '/app/settings'
     | '/app/investor/calculators'
@@ -299,10 +359,16 @@ export interface FileRouteTypes {
   to:
     | '/'
     | '/app'
+    | '/explore-funds'
     | '/forgot-password'
+    | '/live-market'
     | '/login'
+    | '/products'
     | '/reset-password'
+    | '/risk-analyzer'
     | '/signup'
+    | '/sip-calculator'
+    | '/unlisted-equities'
     | '/app/notifications'
     | '/app/settings'
     | '/app/investor/calculators'
@@ -328,10 +394,16 @@ export interface FileRouteTypes {
     | '__root__'
     | '/'
     | '/app'
+    | '/explore-funds'
     | '/forgot-password'
+    | '/live-market'
     | '/login'
+    | '/products'
     | '/reset-password'
+    | '/risk-analyzer'
     | '/signup'
+    | '/sip-calculator'
+    | '/unlisted-equities'
     | '/app/notifications'
     | '/app/settings'
     | '/app/investor/calculators'
@@ -358,19 +430,46 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AppRoute: typeof AppRouteWithChildren
+  ExploreFundsRoute: typeof ExploreFundsRoute
   ForgotPasswordRoute: typeof ForgotPasswordRoute
+  LiveMarketRoute: typeof LiveMarketRoute
   LoginRoute: typeof LoginRoute
+  ProductsRoute: typeof ProductsRoute
   ResetPasswordRoute: typeof ResetPasswordRoute
+  RiskAnalyzerRoute: typeof RiskAnalyzerRoute
   SignupRoute: typeof SignupRoute
+  SipCalculatorRoute: typeof SipCalculatorRoute
+  UnlistedEquitiesRoute: typeof UnlistedEquitiesRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/unlisted-equities': {
+      id: '/unlisted-equities'
+      path: '/unlisted-equities'
+      fullPath: '/unlisted-equities'
+      preLoaderRoute: typeof UnlistedEquitiesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/sip-calculator': {
+      id: '/sip-calculator'
+      path: '/sip-calculator'
+      fullPath: '/sip-calculator'
+      preLoaderRoute: typeof SipCalculatorRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/signup': {
       id: '/signup'
       path: '/signup'
       fullPath: '/signup'
       preLoaderRoute: typeof SignupRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/risk-analyzer': {
+      id: '/risk-analyzer'
+      path: '/risk-analyzer'
+      fullPath: '/risk-analyzer'
+      preLoaderRoute: typeof RiskAnalyzerRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/reset-password': {
@@ -380,6 +479,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ResetPasswordRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/products': {
+      id: '/products'
+      path: '/products'
+      fullPath: '/products'
+      preLoaderRoute: typeof ProductsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/login': {
       id: '/login'
       path: '/login'
@@ -387,11 +493,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LoginRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/live-market': {
+      id: '/live-market'
+      path: '/live-market'
+      fullPath: '/live-market'
+      preLoaderRoute: typeof LiveMarketRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/forgot-password': {
       id: '/forgot-password'
       path: '/forgot-password'
       fullPath: '/forgot-password'
       preLoaderRoute: typeof ForgotPasswordRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/explore-funds': {
+      id: '/explore-funds'
+      path: '/explore-funds'
+      fullPath: '/explore-funds'
+      preLoaderRoute: typeof ExploreFundsRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/app': {
@@ -629,10 +749,16 @@ const AppRouteWithChildren = AppRoute._addFileChildren(AppRouteChildren)
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AppRoute: AppRouteWithChildren,
+  ExploreFundsRoute: ExploreFundsRoute,
   ForgotPasswordRoute: ForgotPasswordRoute,
+  LiveMarketRoute: LiveMarketRoute,
   LoginRoute: LoginRoute,
+  ProductsRoute: ProductsRoute,
   ResetPasswordRoute: ResetPasswordRoute,
+  RiskAnalyzerRoute: RiskAnalyzerRoute,
   SignupRoute: SignupRoute,
+  SipCalculatorRoute: SipCalculatorRoute,
+  UnlistedEquitiesRoute: UnlistedEquitiesRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
