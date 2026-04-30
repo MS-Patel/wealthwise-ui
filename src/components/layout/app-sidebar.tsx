@@ -52,6 +52,17 @@ export function AppSidebar() {
 
   const sections = user ? NAV_BY_ROLE[user.role] : [];
 
+  const allPaths = sections.flatMap((s) => s.items.map((i) => i.to));
+  const isActive = (to: string) => {
+    if (pathname === to) return true;
+    // If another nav item is a more specific prefix match, defer to it
+    const hasMoreSpecific = allPaths.some(
+      (p) => p !== to && p.startsWith(to + "/") && (pathname === p || pathname.startsWith(p + "/")),
+    );
+    if (hasMoreSpecific) return false;
+    return pathname.startsWith(to + "/");
+  };
+
   return (
     <aside
       className={cn(
