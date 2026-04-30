@@ -16,6 +16,8 @@ import {
   FileBarChart,
   LineChart,
   BadgeCheck,
+  Layers,
+  Upload,
   type LucideIcon,
 } from "lucide-react";
 import type { UserRole } from "@/types/auth";
@@ -37,8 +39,10 @@ const investorNav: NavSection[] = [
     label: "Overview",
     items: [
       { label: "Dashboard", to: "/app/investor", icon: LayoutDashboard },
+      { label: "All Investments", to: "/app/investor/investments", icon: Layers },
       { label: "Portfolio", to: "/app/investor/portfolio", icon: PieChart },
       { label: "Transactions", to: "/app/investor/transactions", icon: ReceiptText },
+      { label: "Import CAS", to: "/app/investor/import", icon: Upload },
     ],
   },
   {
