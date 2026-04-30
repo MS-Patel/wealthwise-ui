@@ -13,7 +13,7 @@ export function CASUploadDropzone({ onFileSelected, selected, disabled }: Props)
   const [dragOver, setDragOver] = useState(false);
 
   const onDrop = useCallback(
-    (e: React.DragEvent<HTMLDivElement>) => {
+    (e: React.DragEvent<HTMLLabelElement>) => {
       e.preventDefault();
       setDragOver(false);
       const f = e.dataTransfer.files?.[0];
