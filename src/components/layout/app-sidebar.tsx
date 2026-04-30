@@ -88,7 +88,7 @@ export function AppSidebar() {
                   key={item.to}
                   item={item}
                   collapsed={collapsed}
-                  active={pathname === item.to || pathname.startsWith(item.to + "/")}
+                  active={isActive(item.to)}
                 />
               ))}
             </div>
